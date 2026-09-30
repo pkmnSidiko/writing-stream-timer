@@ -65,7 +65,7 @@
   }
   function pause() { if(!state.running)return; state.running=false; state.lastTick=null; announce("Countdown paused."); render(); }
   function reset() { resetState(); announce("Countdown reset."); }
-  function openSettings() { if(viewerMode||embedMode)return; state.settingsOpener=document.activeElement; populateSettings(); $("settings-dialog").showModal(); $("setting-label").focus(); }
+  function openSettings() { if(viewerMode)return; state.settingsOpener=document.activeElement; populateSettings(); $("settings-dialog").showModal(); $("setting-label").focus(); }
   function populateSettings() { const c=state.config; $("setting-label").value=c.label; $("setting-mode").value=c.mode; $("setting-hours").value=c.hours; $("setting-minutes").value=c.minutes; $("setting-seconds").value=c.seconds; $("setting-target").value=c.target; $("setting-count-up").checked=c.countUp; toggleModeFields(); }
   function toggleModeFields() { const target=$("setting-mode").value==="target"; $("duration-fields").hidden=target; $("target-fields").hidden=!target; }
   function restoreDefaults() { state.config=normalize(DEFAULTS); saveConfig(); resetState(); populateSettings(); announce("Default countdown settings restored."); }
