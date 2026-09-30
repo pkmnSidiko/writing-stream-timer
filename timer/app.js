@@ -2,6 +2,7 @@
   "use strict";
 
   const STORAGE_KEY = "tlc-storyworks-writing-timer";
+  const CONFIG_PARAM = "config";
   const DEFAULT_CONFIG = JSON.parse(JSON.stringify(TIMER_CONFIG));
   const params = new URLSearchParams(location.search);
   const viewerMode = params.has("viewer");
@@ -23,10 +24,11 @@
     baseUrl.search = "";
     baseUrl.hash = "";
     const directUrl = baseUrl.href;
+    const sharedConfig = encodeURIComponent(JSON.stringify(config));
     const viewerUrl = new URL(directUrl);
-    viewerUrl.search = "?viewer";
+    viewerUrl.search = "?viewer&" + CONFIG_PARAM + "=" + sharedConfig;
     const embedUrl = new URL(directUrl);
-    embedUrl.search = "?embed";
+    embedUrl.search = "?embed&" + CONFIG_PARAM + "=" + sharedConfig;
 
     $("direct-url").textContent = directUrl;
     $("viewer-url").textContent = viewerUrl;
@@ -52,6 +54,20 @@
   }
 
   function loadConfig() {
+    try {
+      const shared = params.get(CONFIG_PARAM);
+      if (shared) {
+        const parsed = JSON.parse(shared);
+        if (parsed && parsed.streamName && Array.isArray(parsed.stages) && parsed.stages.length) {
+          const sharedConfig = normalizeConfig(parsed);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(sharedConfig));
+          return sharedConfig;
+        }
+      }
+    } catch (error) {
+      console.warn("Could not load timer settings from the shared URL.", error);
+    }
+
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
       if (saved && saved.streamName && Array.isArray(saved.stages) && saved.stages.length) {
