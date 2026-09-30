@@ -79,7 +79,11 @@ h3 {
 }
 
 .tools + .tools {
-  margin-top: 2.5rem;
+  margin-top: 1.5rem;
+}
+
+.tools .tool-card + .tool-card {
+  margin-top: 1.5rem;
 }
 
 .tool-card {
