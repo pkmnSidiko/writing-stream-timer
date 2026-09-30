@@ -23,6 +23,20 @@ body {
   font-family: "DM Sans", system-ui, sans-serif;
 }
 
+.back-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: .85rem;
+}
+
+.back-link:hover {
+  color: var(--accent-strong);
+  text-decoration: underline;
+}
+
 .timer-shell { width: min(760px, 92vw); }
 
 .timer-card {
