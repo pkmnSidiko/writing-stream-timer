@@ -132,6 +132,74 @@ button.danger { color: #f2c4c4; }
   font-size: .8rem;
 }
 
+.usage-help {
+  margin-top: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(36, 29, 41, .65);
+}
+
+.usage-help summary {
+  padding: .9rem 1rem;
+  color: var(--accent-strong);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.usage-content {
+  display: grid;
+  gap: 1rem;
+  padding: 0 1rem 1rem;
+}
+
+.usage-content section {
+  padding-top: .8rem;
+  border-top: 1px solid var(--border);
+}
+
+.usage-content h2 {
+  margin: 0 0 .35rem;
+  font-size: 1rem;
+}
+
+.usage-content p {
+  margin: .35rem 0;
+  color: var(--muted);
+  font-size: .85rem;
+  line-height: 1.5;
+}
+
+.usage-note {
+  font-size: .78rem !important;
+}
+
+.url-box,
+.code-box {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .65rem;
+}
+
+.url-box code,
+.code-box code {
+  min-width: 0;
+  flex: 1;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+.url-box button,
+.code-box button {
+  flex: 0 0 auto;
+  padding: .45rem .7rem;
+  font-size: .8rem;
+}
+
+.code-box code {
+  font-size: .75rem;
+}
+
 code {
   padding: .1rem .3rem;
   border-radius: 4px;
