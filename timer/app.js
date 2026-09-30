@@ -394,6 +394,19 @@
     }
   }
 
+  function updateStageFromEditor(row, index) {
+    const stage = config.stages[index];
+    if (!stage) return;
+
+    const nameInput = row.querySelector('[data-field="name"]');
+    const minutesInput = row.querySelector('[data-field="minutes"]');
+    const writingInput = row.querySelector('[data-field="writing"]');
+
+    stage.name = nameInput.value;
+    stage.minutes = Math.max(1, Math.min(1440, Math.round(Number(minutesInput.value) || 1)));
+    stage.writing = writingInput.checked;
+  }
+
   function readSettingsForm() {
     config.streamName = $("setting-stream-name").value.trim() || "TLC Storyworks";
     config.planName = $("setting-plan-name").value.trim() || "Writing Session";
