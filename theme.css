@@ -58,3 +58,25 @@
   .theme-actions { flex-wrap:wrap; }
   .theme-spacer { display:none; }
 }
+
+
+/* Accessibility baseline */
+.theme-button:focus-visible,
+.theme-preset:focus-visible,
+.theme-field input:focus-visible,
+.theme-actions button:focus-visible,
+.theme-close:focus-visible {
+  outline: 2px solid var(--theme-accent-strong);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
