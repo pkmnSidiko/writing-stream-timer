@@ -1,7 +1,8 @@
 (() => {
   "use strict";
 
-  const stages = TIMER_CONFIG.stages;
+  const stages = TIMER_PLAN.stages;
+  const totalStreamSeconds = stages.reduce((sum, stage) => sum + stage.minutes * 60, 0);
   const totalWritingSeconds = stages
     .filter(stage => stage.writing)
     .reduce((sum, stage) => sum + stage.minutes * 60, 0);
@@ -24,6 +25,10 @@
     return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
   }
 
+  function writingStages() {
+    return stages.filter(stage => stage.writing);
+  }
+
   function writingBlockNumber() {
     return stages.slice(0, state.stageIndex + 1).filter(stage => stage.writing).length;
   }
@@ -37,24 +42,55 @@
         : 0);
   }
 
+  function completedStreamSeconds() {
+    return stages.slice(0, state.stageIndex)
+      .reduce((sum, stage) => sum + stage.minutes * 60, 0)
+      + (stages[state.stageIndex]
+        ? stages[state.stageIndex].minutes * 60 - state.remaining
+        : 0);
+  }
+
+  function setProgressVisibility() {
+    $("writing-progress-wrap").hidden = !TIMER_CONFIG.display.showWritingProgress;
+    $("stream-progress-wrap").hidden = !TIMER_CONFIG.display.showStreamProgress;
+    $("next-stage").hidden = !TIMER_CONFIG.display.showNextStage;
+    $("plan-name").hidden = !TIMER_CONFIG.display.showPlanName;
+  }
+
   function render() {
     const stage = stages[state.stageIndex];
-    const progress = Math.min(100, (completedWritingSeconds() / totalWritingSeconds) * 100);
+    const writingProgress = totalWritingSeconds
+      ? Math.min(100, (completedWritingSeconds() / totalWritingSeconds) * 100)
+      : 0;
+    const streamProgress = totalStreamSeconds
+      ? Math.min(100, (completedStreamSeconds() / totalStreamSeconds) * 100)
+      : 0;
     const next = stages[state.stageIndex + 1];
+    const writingCount = writingStages().length;
 
     $("stream-name").textContent = TIMER_CONFIG.streamName;
+    $("plan-name").textContent = TIMER_PLAN.name;
     $("stage-name").textContent = stage
       ? (stage.writing ? TIMER_CONFIG.labels.writingIcon : TIMER_CONFIG.labels.breakIcon) + " " + stage.name
       : "Finished";
     $("time").textContent = formatTime(state.remaining);
-    $("progress-percent").textContent = Math.round(progress) + "%";
-    $("writing-progress").style.width = progress + "%";
-    $("writing-progress").parentElement.setAttribute("aria-valuenow", Math.round(progress));
-    $("block-count").textContent = writingBlockNumber() + " / " +
-      stages.filter(stage => stage.writing).length + " writing blocks";
+
+    $("writing-progress-percent").textContent = Math.round(writingProgress) + "%";
+    $("writing-progress").style.width = writingProgress + "%";
+    $("writing-progress").parentElement.setAttribute("aria-valuenow", Math.round(writingProgress));
+    $("writing-progress-label").textContent = TIMER_CONFIG.labels.writingProgressLabel;
+    $("block-count").textContent = writingBlockNumber() + " / " + writingCount + " writing blocks";
+
+    $("stream-progress-percent").textContent = Math.round(streamProgress) + "%";
+    $("stream-progress").style.width = streamProgress + "%";
+    $("stream-progress").parentElement.setAttribute("aria-valuenow", Math.round(streamProgress));
+    $("stream-progress-label").textContent = TIMER_CONFIG.labels.streamProgressLabel;
+
     $("next-stage").textContent = next
       ? TIMER_CONFIG.labels.nextPrefix + ": " + next.name + " — " + formatTime(next.minutes * 60)
       : "All done!";
+
+    setProgressVisibility();
   }
 
   function tick(now) {
