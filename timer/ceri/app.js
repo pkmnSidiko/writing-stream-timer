@@ -27,13 +27,9 @@
     const sharedConfig = encodeURIComponent(JSON.stringify(config));
     const viewerUrl = new URL(directUrl);
     viewerUrl.search = "?viewer&" + CONFIG_PARAM + "=" + sharedConfig;
-    const embedUrl = new URL(directUrl);
-    embedUrl.search = "?embed&" + CONFIG_PARAM + "=" + sharedConfig;
 
     $("direct-url").textContent = directUrl;
-    $("viewer-url").textContent = viewerUrl;
-    $("embed-url").textContent = embedUrl;
-    $("iframe-code").textContent = `<iframe src="${embedUrl}" width="100%" height="500" frameborder="0" title="Writing Stream Timer"></iframe>`;
+    $("viewer-url").textContent = viewerUrl.href;
 
     document.querySelectorAll(".copy-url").forEach(button => {
       button.addEventListener("click", async () => {
