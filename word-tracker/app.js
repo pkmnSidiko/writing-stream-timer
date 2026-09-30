@@ -253,10 +253,12 @@
           await navigator.clipboard.writeText(source);
           const original = button.textContent;
           button.textContent = "Copied!";
+          announce("Copied " + (button.dataset.url === "iframe-code" ? "iframe code." : "URL.") );
           setTimeout(() => { button.textContent = original; }, 1200);
         } catch {
           const original = button.textContent;
           button.textContent = "Copy failed";
+          announce("Copy failed.");
           setTimeout(() => { button.textContent = original; }, 1500);
         }
       });
