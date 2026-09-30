@@ -427,7 +427,10 @@
         target instanceof HTMLTextAreaElement ||
         target instanceof HTMLSelectElement ||
         target?.isContentEditable;
-      if (isTextEntry || $("settings-dialog").open || viewerMode || embedMode) return;
+      const isInteractiveControl = target instanceof HTMLButtonElement ||
+        target instanceof HTMLAnchorElement ||
+        target instanceof HTMLElement && target.tagName === "SUMMARY";
+      if (isTextEntry || isInteractiveControl || $("settings-dialog").open || viewerMode || embedMode) return;
 
       const key = event.key.toLowerCase();
       if (event.key === " ") {
