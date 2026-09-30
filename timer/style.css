@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Libre+Baskerville:wght@400;700&display=swap');
 
 :root {
-  --bg: #17131a;
-  --card: #241d29;
-  --text: #f7f1f5;
-  --muted: #c6b8c5;
-  --accent: #d7a9c9;
-  --accent-strong: #efc8df;
-  --track: #3a2e3d;
-  --border: rgba(255,255,255,.09);
+  --theme-bg: #17131a;
+  --theme-panel: #241d29;
+  --theme-text: #f7f1f5;
+  --theme-muted: #c6b8c5;
+  --theme-accent: #d7a9c9;
+  --theme-accent-strong: #efc8df;
+  --theme-track: #3a2e3d;
+  --theme-border: rgba(255,255,255,.09);
 }
 
 * { box-sizing: border-box; }
@@ -43,7 +43,7 @@ body {
   padding: 2.5rem;
   border: 1px solid var(--border);
   border-radius: 24px;
-  background: rgba(36, 29, 41, .94);
+  background: color-mix(in srgb, var(--theme-panel) 94%, transparent);
   box-shadow: 0 20px 70px rgba(0,0,0,.28);
 }
 
@@ -121,7 +121,7 @@ button {
   cursor: pointer;
 }
 
-button:hover { background: #32283a; }
+button:hover { background: var(--theme-panel-hover); }
 
 button:focus-visible,
 input:focus-visible {
@@ -132,7 +132,7 @@ input:focus-visible {
 button.primary {
   border-color: transparent;
   background: var(--accent);
-  color: #241d29;
+  color: var(--theme-panel);
   font-weight: 700;
 }
 
@@ -150,7 +150,7 @@ button.danger { color: #f2c4c4; }
   margin-top: 1.25rem;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: rgba(36, 29, 41, .65);
+  background: color-mix(in srgb, var(--theme-panel) 65%, transparent);
 }
 
 .usage-help summary {
@@ -217,7 +217,7 @@ button.danger { color: #f2c4c4; }
 code {
   padding: .1rem .3rem;
   border-radius: 4px;
-  background: rgba(255,255,255,.08);
+  background: color-mix(in srgb, var(--theme-text) 8%, transparent);
 }
 
 .settings-dialog {
@@ -226,7 +226,7 @@ code {
   padding: 0;
   border: 1px solid var(--border);
   border-radius: 22px;
-  background: #211a25;
+  background: var(--theme-panel);
   color: var(--text);
   box-shadow: 0 30px 100px rgba(0,0,0,.55);
 }
@@ -307,7 +307,7 @@ input[type="number"] {
   border-radius: 9px;
   padding: .65rem .7rem;
   color: var(--text);
-  background: #17131a;
+  background: var(--theme-bg);
   font: inherit;
 }
 
