@@ -1,0 +1,32 @@
+const TIMER_CONFIG = {
+  activePlan: "ceri-session",
+  streamName: "TLC Storyworks",
+  plans: {
+    "ceri-session": {
+      name: "Ceri's Writing Session",
+      stages: [
+        { name: "Setup", minutes: 10, writing: false },
+        { name: "Writing Sprint 1", minutes: 25, writing: true },
+        { name: "Break", minutes: 5, writing: false },
+        { name: "Writing Sprint 2", minutes: 25, writing: true },
+        { name: "Break", minutes: 5, writing: false },
+        { name: "Writing Sprint 3", minutes: 25, writing: true },
+        { name: "Wrap-Up", minutes: 10, writing: false }
+      ]
+    }
+  },
+  display: {
+    showWritingProgress: true,
+    showStreamProgress: true,
+    showNextStage: true,
+    showPlanName: false
+  },
+  labels: {
+    writingIcon: "Writing",
+    breakIcon: "Break",
+    nextPrefix: "Next",
+    writingProgressLabel: "Writing progress",
+    streamProgressLabel: "Stream progress"
+  }
+};
+const TIMER_PLAN = TIMER_CONFIG.plans[TIMER_CONFIG.activePlan];
