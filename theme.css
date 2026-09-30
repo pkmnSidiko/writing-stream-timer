@@ -12,6 +12,7 @@
 
 .theme-button {
   position: fixed; top: 1rem; right: 1rem; z-index: 20;
+  min-height: 44px;
   border: 1px solid var(--theme-border); border-radius: 999px;
   padding: .55rem .8rem; color: var(--theme-text); background: var(--theme-panel);
   font: inherit; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.18);
@@ -31,7 +32,7 @@
 .theme-header { justify-content:space-between; margin-bottom:1.25rem; }
 .theme-header h2 { margin:.25rem 0 0; font-family:"Libre Baskerville",Georgia,serif; }
 .theme-close {
-  width:2.2rem; height:2.2rem; padding:0; border-radius:50%;
+  width:2.75rem; height:2.75rem; padding:0; border-radius:50%;
   color:var(--theme-text); background:var(--theme-panel-hover);
   border:1px solid var(--theme-border); font-size:1.35rem; line-height:1;
 }
