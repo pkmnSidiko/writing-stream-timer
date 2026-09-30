@@ -12,6 +12,37 @@
 
   const $ = id => document.getElementById(id);
 
+  function setupUsageLinks() {
+    const baseUrl = new URL(location.href);
+    baseUrl.search = "";
+    baseUrl.hash = "";
+    const directUrl = baseUrl.href;
+    const viewerUrl = new URL(directUrl);
+    viewerUrl.search = "?viewer";
+    const embedUrl = new URL(directUrl);
+    embedUrl.search = "?embed";
+
+    $("direct-url").textContent = directUrl;
+    $("viewer-url").textContent = viewerUrl.href;
+    $("embed-url").textContent = embedUrl.href;
+    $("iframe-code").textContent = `<iframe src="${embedUrl.href}" width="100%" height="500" frameborder="0" title="Writing Stream Timer"></iframe>`;
+
+    document.querySelectorAll(".copy-url").forEach(button => {
+      button.addEventListener("click", async () => {
+        const source = $(button.dataset.url).textContent;
+        try {
+          await navigator.clipboard.writeText(source);
+          const original = button.textContent;
+          button.textContent = "Copied!";
+          setTimeout(() => { button.textContent = original; }, 1200);
+        } catch {
+          button.textContent = "Copy failed";
+          setTimeout(() => { button.textContent = button.dataset.url === "iframe-code" ? "Copy iframe" : "Copy"; }, 1500);
+        }
+      });
+    });
+  }
+
   function loadConfig() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
@@ -349,5 +380,6 @@
 
   recalculateTotals();
   state.remaining = stages[0].minutes * 60;
+  if (!viewerMode && !embedMode) setupUsageLinks();
   render();
 })();
