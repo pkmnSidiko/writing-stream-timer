@@ -299,48 +299,87 @@
     renderStageEditors();
   }
 
-  function renderStageEditors() {
+  function renderStageEditors(focusIndex = null) {
     const list = $("stage-list");
-    list.innerHTML = "";
+    list.replaceChildren();
 
     config.stages.forEach((stage, index) => {
       const row = document.createElement("div");
       row.className = "stage-editor";
-      row.innerHTML = `
-        <div class="stage-number">${index + 1}</div>
-        <label class="stage-name-input">Name<input type="text" data-field="name" maxlength="80" value="${escapeAttribute(stage.name)}"></label>
-        <label class="stage-minutes">Minutes<input type="number" data-field="minutes" min="1" max="1440" step="1" value="${stage.minutes}"></label>
-        <label class="stage-writing"><input type="checkbox" data-field="writing" ${stage.writing ? "checked" : ""}> Writing</label>
-        <button type="button" class="icon-button remove-stage" title="Remove stage" aria-label="Remove stage">×</button>
-      `;
 
-      row.querySelectorAll("input").forEach(input => {
+      const number = document.createElement("div");
+      number.className = "stage-number";
+      number.textContent = index + 1;
+      number.setAttribute("aria-hidden", "true");
+
+      const nameLabel = document.createElement("label");
+      nameLabel.className = "stage-name-input";
+      nameLabel.append("Name");
+      const nameInput = document.createElement("input");
+      nameInput.type = "text";
+      nameInput.maxLength = 80;
+      nameInput.value = stage.name;
+      nameInput.dataset.field = "name";
+      nameInput.setAttribute("aria-label", `Stage ${index + 1} name`);
+      nameLabel.appendChild(nameInput);
+
+      const minutesLabel = document.createElement("label");
+      minutesLabel.className = "stage-minutes";
+      minutesLabel.append("Minutes");
+      const minutesInput = document.createElement("input");
+      minutesInput.type = "number";
+      minutesInput.min = "1";
+      minutesInput.max = "1440";
+      minutesInput.step = "1";
+      minutesInput.value = stage.minutes;
+      minutesInput.dataset.field = "minutes";
+      minutesInput.setAttribute("aria-label", `Stage ${index + 1} duration in minutes`);
+      minutesLabel.appendChild(minutesInput);
+
+      const writingLabel = document.createElement("label");
+      writingLabel.className = "stage-writing";
+      const writingInput = document.createElement("input");
+      writingInput.type = "checkbox";
+      writingInput.checked = stage.writing;
+      writingInput.dataset.field = "writing";
+      writingInput.setAttribute("aria-label", `Stage ${index + 1} counts toward writing progress`);
+      writingLabel.append(writingInput, " Writing");
+
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.className = "icon-button remove-stage";
+      removeButton.title = "Remove stage";
+      removeButton.setAttribute(
+        "aria-label",
+        config.stages.length <= 1
+          ? "Remove stage (at least one stage is required)"
+          : `Remove stage ${index + 1}: ${stage.name || "Stage"}`
+      );
+      removeButton.textContent = "×";
+      removeButton.disabled = config.stages.length <= 1;
+
+      row.append(number, nameLabel, minutesLabel, writingLabel, removeButton);
+
+      [nameInput, minutesInput, writingInput].forEach(input => {
         input.addEventListener("input", () => updateStageFromEditor(row, index));
         input.addEventListener("change", () => updateStageFromEditor(row, index));
       });
-      row.querySelector(".remove-stage").addEventListener("click", () => {
+
+      removeButton.addEventListener("click", () => {
         if (config.stages.length <= 1) return;
+        const focusTargetIndex = Math.min(index, config.stages.length - 2);
         config.stages.splice(index, 1);
-        renderStageEditors();
+        renderStageEditors(focusTargetIndex);
+        announce(`Removed stage ${index + 1}. Focus moved to stage ${focusTargetIndex + 1}.`);
       });
+
       list.appendChild(row);
     });
-  }
 
-  function escapeAttribute(value) {
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/"/g, "&quot;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
-
-  function updateStageFromEditor(row, index) {
-    const stage = config.stages[index];
-    if (!stage) return;
-    stage.name = row.querySelector('[data-field="name"]').value;
-    stage.minutes = Math.max(1, Math.round(Number(row.querySelector('[data-field="minutes"]').value) || 1));
-    stage.writing = row.querySelector('[data-field="writing"]').checked;
+    if (focusIndex !== null) {
+      const target = list.querySelectorAll(".stage-editor")[focusIndex]?.querySelector('[data-field="name"]');
+      target?.focus();
+    }
   }
 
   function readSettingsForm() {
@@ -394,7 +433,9 @@
       minutes: 10,
       writing: false
     });
-    renderStageEditors();
+    const newStageIndex = config.stages.length - 1;
+    renderStageEditors(newStageIndex);
+    announce(`Added stage ${newStageIndex + 1}. Focus moved to its name field.`);
   });
 
   $("restore-defaults").addEventListener("click", () => {
