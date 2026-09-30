@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Libre+Baskerville:wght@400;700&display=swap');
 
 :root {
-  --bg: #17131a;
-  --panel: #241d29;
-  --panel-hover: #2d2433;
-  --text: #f7f1f5;
-  --muted: #c6b8c5;
-  --accent: #d7a9c9;
-  --accent-strong: #efc8df;
-  --border: rgba(255,255,255,.09);
+  --theme-bg: #17131a;
+  --theme-panel: #241d29;
+  --theme-panel-hover: #2d2433;
+  --theme-text: #f7f1f5;
+  --theme-muted: #c6b8c5;
+  --theme-accent: #d7a9c9;
+  --theme-accent-strong: #efc8df;
+  --theme-border: rgba(255,255,255,.09);
   --max: 980px;
 }
 
@@ -92,14 +92,14 @@ h3 {
   text-decoration: none;
   border: 1px solid var(--border);
   border-radius: 22px;
-  background: rgba(36, 29, 41, .9);
+  background: color-mix(in srgb, var(--theme-panel) 90%, transparent);
   transition: transform .15s ease, background .15s ease, border-color .15s ease;
 }
 
 .tool-card:hover {
   transform: translateY(-2px);
   background: var(--panel-hover);
-  border-color: rgba(239,200,223,.25);
+  border-color: color-mix(in srgb, var(--theme-accent-strong) 25%, transparent);
 }
 
 .tool-card:focus-visible {
@@ -113,7 +113,7 @@ h3 {
   width: 4rem;
   height: 4rem;
   border-radius: 16px;
-  background: rgba(215,169,201,.12);
+  background: color-mix(in srgb, var(--theme-accent) 12%, transparent);
   color: var(--accent-strong);
   font-size: 2rem;
 }
@@ -152,7 +152,7 @@ h3 {
   padding: 1.4rem;
   border: 1px solid var(--border);
   border-radius: 18px;
-  background: rgba(36, 29, 41, .65);
+  background: color-mix(in srgb, var(--theme-panel) 65%, transparent);
 }
 
 .idea-card p {
