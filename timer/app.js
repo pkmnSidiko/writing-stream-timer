@@ -120,6 +120,21 @@
     return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
   }
 
+  function formatTimeForScreenReader(seconds) {
+    seconds = Math.max(0, Math.ceil(seconds));
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    const parts = [];
+    if (minutes) parts.push(minutes + (minutes === 1 ? " minute" : " minutes"));
+    if (secs || !minutes) parts.push(secs + (secs === 1 ? " second" : " seconds"));
+    return parts.join(" ");
+  }
+
+  function announce(message) {
+    $("timer-status").textContent = "";
+    requestAnimationFrame(() => { $("timer-status").textContent = message; });
+  }
+
   function writingStages() {
     return stages.filter(stage => stage.writing);
   }
@@ -173,6 +188,7 @@
       ? (stagePrefix ? stagePrefix + " " : "") + stage.name
       : "Finished";
     $("time").textContent = formatTime(state.remaining);
+    $("time").setAttribute("aria-label", formatTimeForScreenReader(state.remaining) + " remaining");
 
     $("writing-progress-percent").textContent = Math.round(writingProgress) + "%";
     $("writing-progress").style.width = writingProgress + "%";
@@ -209,6 +225,7 @@
     if (state.running || !stages.length) return;
     state.running = true;
     state.lastTick = null;
+    announce("Timer started. " + (stages[state.stageIndex]?.name || "Current stage") + ".");
     requestAnimationFrame(tick);
   }
 
@@ -216,6 +233,7 @@
     state.running = false;
     state.lastTick = null;
     render();
+    announce("Timer paused.");
   }
 
   function restart() {
@@ -223,6 +241,7 @@
     state.remaining = stages[state.stageIndex].minutes * 60;
     state.lastTick = null;
     render();
+    announce((stages[state.stageIndex].name || "Current stage") + " restarted.");
   }
 
   function reset() {
@@ -231,6 +250,7 @@
     state.remaining = stages[0].minutes * 60;
     state.lastTick = null;
     render();
+    announce("Timer reset. " + (stages[0]?.name || "First stage") + " ready.");
   }
 
   function advance() {
@@ -238,12 +258,14 @@
       state.running = false;
       state.remaining = 0;
       state.lastTick = null;
+      announce("Timer complete.");
       return;
     }
 
     state.stageIndex += 1;
     state.remaining = stages[state.stageIndex].minutes * 60;
     state.lastTick = null;
+    announce("Stage changed to " + stages[state.stageIndex].name + ". " + formatTimeForScreenReader(state.remaining) + ".");
   }
 
   function saveConfig() {
