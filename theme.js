@@ -6,8 +6,13 @@
     preset: "tlc", bg:"#17131a", panel:"#241d29", panelHover:"#2d2433",
     text:"#f7f1f5", muted:"#c6b8c5", accent:"#d7a9c9", accentStrong:"#efc8df", track:"#3a2e3d"
   };
+  const TIMER_DEFAULT_THEME = {
+    name:"Timer Neutral", preset:"neutral", bg:"#f2f2f0", panel:"#ffffff", panelHover:"#e7e7e4",
+    text:"#202020", muted:"#5f5f5b", accent:"#555555", accentStrong:"#303030", track:"#d0d0cc"
+  };
   const PRESETS = {
     tlc: { name:"TLC Storyworks", ...DEFAULT_THEME },
+    neutral: TIMER_DEFAULT_THEME,
     light: { name:"Light", preset:"light", bg:"#f5f1f4", panel:"#ffffff", panelHover:"#eee7ec", text:"#241d29", muted:"#625966", accent:"#8b4f7b", accentStrong:"#6d3b60", track:"#ded4dc" },
     dark: { name:"Dark", preset:"dark", bg:"#0f1115", panel:"#1a1e25", panelHover:"#252b34", text:"#f4f6f8", muted:"#b7bec8", accent:"#8bb8ff", accentStrong:"#b5d2ff", track:"#343b47" },
     contrast: { name:"High Contrast", preset:"contrast", bg:"#000000", panel:"#111111", panelHover:"#222222", text:"#ffffff", muted:"#e8e8e8", accent:"#ffff00", accentStrong:"#ffff00", track:"#666666" }
@@ -16,11 +21,12 @@
   const $ = id => document.getElementById(id);
 
   function load() {
+    const pageDefault = document.body?.dataset.tool === "timer" ? TIMER_DEFAULT_THEME : DEFAULT_THEME;
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (saved && saved.bg && saved.text && saved.accent) return { ...DEFAULT_THEME, ...saved };
+      if (saved && saved.bg && saved.text && saved.accent) return { ...pageDefault, ...saved };
     } catch {}
-    return { ...DEFAULT_THEME };
+    return { ...pageDefault };
   }
   let theme = load();
   let originalTheme = null;
@@ -112,7 +118,7 @@
     KEYS.forEach(key=>$("theme-"+key).addEventListener("input",event=>{
       theme[key]=event.target.value; theme.preset="custom"; apply(); updateContrast(); $("theme-"+key+"-value").textContent=event.target.value;
     }));
-    $("theme-reset").addEventListener("click",()=>{theme={...DEFAULT_THEME};apply();populate();});
+    $("theme-reset").addEventListener("click",()=>{theme={...(document.body.dataset.tool === "timer" ? TIMER_DEFAULT_THEME : DEFAULT_THEME)};apply();populate();});
     $("theme-form").addEventListener("submit",event=>{event.preventDefault();save();originalTheme=null;dialog.close();});
     dialog.addEventListener("click",event=>{if(event.target===dialog)cancelChanges();});
   }
