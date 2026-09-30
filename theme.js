@@ -13,8 +13,13 @@
   const PRESETS = {
     tlc: { name:"TLC Storyworks", ...DEFAULT_THEME },
     neutral: TIMER_DEFAULT_THEME,
-    light: { name:"Light", preset:"light", bg:"#f5f1e8", panel:"#fffdf8", panelHover:"#eee8dc", text:"#2b2924", muted:"#6b665c", accent:"#9a7a45", accentStrong:"#765b2f", track:"#ddd4c4" },
-    dark: { name:"Dark", preset:"dark", bg:"#0e141c", panel:"#18212d", panelHover:"#222e3c", text:"#f3f7fb", muted:"#b7c2ce", accent:"#86b8e8", accentStrong:"#b5d6f5", track:"#344454" },
+    light: { name:"Light", preset:"light", bg:"#f7f1df", panel:"#fffdf6", panelHover:"#eee5cd", text:"#2d2921", muted:"#6d6659", accent:"#9a7a45", accentStrong:"#765b2f", track:"#d8ccb0" },
+    dark: { name:"Dark", preset:"dark", bg:"#0b121c", panel:"#162333", panelHover:"#203247", text:"#f2f7fc", muted:"#b5c2cf", accent:"#82b6e8", accentStrong:"#b4d5f4", track:"#30465c" },
+    warmNeutral: { name:"Warm Neutral", preset:"warm-neutral", bg:"#eee7de", panel:"#fbf7f1", panelHover:"#e5dcd1", text:"#302b27", muted:"#6d6259", accent:"#8a674d", accentStrong:"#694a35", track:"#d3c6b9" },
+    coolNeutral: { name:"Cool Neutral", preset:"cool-neutral", bg:"#e9edef", panel:"#fafcfd", panelHover:"#dde3e7", text:"#263039", muted:"#5f6b74", accent:"#536878", accentStrong:"#394b59", track:"#c8d0d5" },
+    softGray: { name:"Soft Gray", preset:"soft-gray", bg:"#e5e6e8", panel:"#f6f6f7", panelHover:"#dcdde0", text:"#25262a", muted:"#62646a", accent:"#686b73", accentStrong:"#4b4e55", track:"#c6c7ca" },
+    inkPaper: { name:"Ink & Paper", preset:"ink-paper", bg:"#e5dccb", panel:"#f8f2e7", panelHover:"#dcd0bd", text:"#1f1c18", muted:"#5e564c", accent:"#6a6258", accentStrong:"#423c35", track:"#c7b9a5" },
+    monochrome: { name:"Monochrome", preset:"monochrome", bg:"#171717", panel:"#252525", panelHover:"#333333", text:"#f5f5f5", muted:"#c2c2c2", accent:"#d0d0d0", accentStrong:"#ffffff", track:"#4a4a4a" },
     contrast: { name:"High Contrast", preset:"contrast", bg:"#000000", panel:"#111111", panelHover:"#222222", text:"#ffffff", muted:"#e8e8e8", accent:"#ffff00", accentStrong:"#ffff00", track:"#666666" }
   };
   const KEYS = ["bg","panel","panelHover","text","muted","accent","accentStrong","track"];
