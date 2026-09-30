@@ -27,7 +27,7 @@ Open it at:
 
 - `/timer/` — full timer and controls
 - `/timer/?viewer` — transparent viewer/stream overlay
-- `/timer/?embed` — clean transparent embed
+- `/timer/?embed` — interactive transparent embed
 
 The timer's schedule is configured in `timer/config.js`. Use **Appearance** to choose a theme preset or customize the colors and typography.
 
@@ -46,7 +46,7 @@ Open it at:
 
 - `/countdown/` — full countdown and controls
 - `/countdown/?viewer` — transparent viewer/stream display
-- `/countdown/?embed` — clean transparent embed
+- `/countdown/?embed` — interactive transparent embed
 
 ### Word Tracker
 
@@ -67,7 +67,7 @@ Open it at:
 
 - `/word-tracker/` — full tracker and controls
 - `/word-tracker/?viewer` — progress display for streams
-- `/word-tracker/?embed` — clean transparent embed
+- `/word-tracker/?embed` — interactive transparent embed
 
 The tracker stores its project data locally in the browser. Appearance settings are shared across TLC Storyworks tools in the same browser, including theme colors, fonts, text size, and line spacing.
 
@@ -139,7 +139,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [x] Shared appearance/theme infrastructure
 - [x] Theme presets and configurable colors
 - [x] Configurable fonts and typography
-- [ ] Shared embed/display infrastructure
+- [x] Shared embed/display infrastructure
 - [ ] Documentation for stream software and embeds
 
 ### Writing & Progress
