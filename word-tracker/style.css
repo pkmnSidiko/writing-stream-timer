@@ -13,6 +13,8 @@
 
 * { box-sizing: border-box; }
 
+:root { --link-shell-width: 1000px; }
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -20,23 +22,6 @@ body {
   color: var(--theme-text);
   font-family: var(--theme-font-family);
   line-height: var(--theme-line-height);
-}
-
-.back-link {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 2;
-  color: var(--theme-muted);
-  text-decoration: none;
-  font-size: .85rem;
-}
-
-.back-link:hover { color: var(--theme-accent-strong); text-decoration: underline; }
-
-.back-link:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
-  outline: 2px solid var(--theme-accent-strong);
-  outline-offset: 3px;
 }
 
 .tracker-shell { width: min(1000px, 92vw); margin: 0 auto; padding: 5rem 0 3rem; }
