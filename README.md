@@ -4,6 +4,8 @@ A small collection of customizable browser-based tools for writers and other sto
 
 The goal is to make useful, lightweight tools that can work in several places: standalone in a browser, embedded on a website, used as an OBS/Streamlabs browser source, or adapted for a community. TLC Storyworks provides a shared appearance system so each tool can keep the project’s default look while also being themed by the person using it.
 
+See the [public roadmap](https://tlcstoryworks.github.io/writer-tools/roadmap/) for a quick look at what's brewing, or keep scrolling for the full development roadmap.
+
 TLC Storyworks is also an open community project. If you have ideas, feedback, or questions, join the [GitHub Discussions](https://github.com/tlcstoryworks/writer-tools/discussions). If these tools are useful to you and you'd like to help support their development, you can [sponsor TLC Storyworks](https://github.com/sponsors/tlcstoryworks).
 
 ## Current tools
@@ -74,7 +76,7 @@ The tracker stores its project data locally in the browser. Appearance settings 
 
 Future tools will live in their own folders so each widget can remain small, understandable, and independently useful.
 
-Possible additions include word trackers, project/progress widgets, countdowns, session notes, prompt tools, writing games, and community-focused helpers.
+Possible additions include project/progress tools, countdowns, session notes, prompt tools, writing games, challenge helpers, and small stream widgets.
 
 ## Design principles
 
@@ -119,7 +121,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 
 ### Writing & Progress
 - [x] Word tracker
-- [ ] Writing session / sprint tools
+- [x] Writing session / sprint tools
 - [ ] Project and progress tracker
 - [ ] Writing goals and deadlines
 - [ ] Writing log / session history
