@@ -132,6 +132,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 
 ### Prompts & Creative Tools
 - [ ] Who / What / When / Where / Why / How prompt generator
+- [ ] Prompt Deck — digital card-draw system using separate W/W/W/W/W/H decks
 - [ ] Character prompt generator
 - [ ] Scene prompt generator
 - [ ] Conflict generator
@@ -144,7 +145,9 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [ ] Challenge tracker
 - [ ] Calendar / challenge progress view
 - [ ] Submission and external-link tracking
-- [ ] Writing games and community helpers
+- [ ] Writing game toolkit
+- [ ] Customizable crawl/adventure-style writing games
+- [ ] Shareable game configurations
 
 ### Stream & Embed Widgets
 - [ ] Current activity widget
@@ -163,6 +166,10 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [ ] Large-text and low-stimulation display options
 - [ ] Reduced-motion and high-contrast options
 - [ ] Additional keyboard, screen-reader, and touch testing
+
+### Future / Physical Extensions
+- [ ] Design Prompt Deck data so digital cards can also support future printable/physical decks
+- [ ] Explore printable Prompt Deck exports once the digital system is established
 
 ## License
 
