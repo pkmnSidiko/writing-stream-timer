@@ -147,9 +147,10 @@
         <label>Starting word count<input id="setting-starting-count" type="number" min="0" step="1" inputmode="numeric"></label>
         <label>Daily target (optional)<input id="setting-daily-target" type="number" min="0" step="1" inputmode="numeric" placeholder="No daily target"></label>
         <label>Start date (optional)<input id="setting-start-date" type="date"></label>
-        <label>End date (optional)<input id="setting-end-date" type="date"></label>
+        <label>End date (optional)<input id="setting-end-date" type="date" aria-describedby="settings-error"></label>
       </div>
       <p class="dialog-help">For an existing project, put the words you already have in Starting word count. New words added through the tracker are recorded separately in your history.</p>
+      <p id="settings-error" class="dialog-error" role="alert" hidden></p>
       <div class="settings-actions"><button type="button" id="reset-project" class="danger">Reset project</button><span class="settings-spacer"></span><button type="button" id="cancel-settings">Cancel</button><button type="submit" class="primary">Save settings</button></div>
     </form>
   </dialog>
