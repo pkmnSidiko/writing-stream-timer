@@ -459,3 +459,11 @@ body.viewer .time {
 
 body.viewer .site-footer,
 body.embed .site-footer { display: none; }
+
+
+/* Accessibility baseline */
+a:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--theme-accent-strong);
+  outline-offset: 3px;
+}
