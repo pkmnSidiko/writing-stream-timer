@@ -2,7 +2,7 @@
 
 A small collection of customizable browser-based tools for writers and other storytellers.
 
-The goal is to make useful, lightweight tools that can work in several places: standalone in a browser, embedded on a website, used as an OBS/Streamlabs browser source, or adapted for a community.
+The goal is to make useful, lightweight tools that can work in several places: standalone in a browser, embedded on a website, used as an OBS/Streamlabs browser source, or adapted for a community. TLC Storyworks provides a shared appearance system so each tool can keep the project’s default look while also being themed by the person using it.
 
 TLC Storyworks is also an open community project. If you have ideas, feedback, or questions, join the [GitHub Discussions](https://github.com/tlcstoryworks/writer-tools/discussions). If these tools are useful to you and you'd like to help support their development, you can [sponsor TLC Storyworks](https://github.com/sponsors/tlcstoryworks).
 
@@ -27,7 +27,7 @@ Open it at:
 - `/timer/?viewer` — transparent viewer/stream overlay
 - `/timer/?embed` — clean transparent embed
 
-The timer's schedule is configured in `timer/config.js`.
+The timer's schedule is configured in `timer/config.js`. Use **Appearance** to choose a theme preset or customize the colors.
 
 ### Word Tracker
 
@@ -50,7 +50,7 @@ Open it at:
 - `/word-tracker/?viewer` — progress display for streams
 - `/word-tracker/?embed` — clean transparent embed
 
-The tracker stores its project data locally in the browser.
+The tracker stores its project data locally in the browser. Appearance settings are shared across TLC Storyworks tools in the same browser.
 
 ## Project structure
 
@@ -67,6 +67,8 @@ The tracker stores its project data locally in the browser.
 │   ├── index.html
 │   ├── style.css
 │   └── app.js
+├── theme.css         # Shared appearance/theme styles
+├── theme.js          # Shared appearance/theme controls
 └── ...
 ```
 
@@ -108,9 +110,9 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [x] Create a toolbox landing page
 - [x] Add viewer and embed URL modes
 - [ ] Accessibility foundation and testing
-- [ ] More visual themes
-- [ ] Shared configuration/theme infrastructure
-- [ ] Configurable colors and fonts
+- [x] Shared appearance/theme infrastructure
+- [x] Theme presets and configurable colors
+- [ ] Configurable fonts and typography
 - [x] Word tracker
 - [ ] Project/progress tracker
 - [ ] Prompt and writing-game tools
