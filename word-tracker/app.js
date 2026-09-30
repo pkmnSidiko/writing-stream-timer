@@ -242,9 +242,9 @@
     embedUrl.search = "?embed";
 
     $("direct-url").textContent = directUrl;
-    $("viewer-url").textContent = viewerUrl.href;
-    $("embed-url").textContent = embedUrl.href;
-    $("iframe-code").textContent = '<iframe src="' + embedUrl.href + '" width="100%" height="280" frameborder="0" title="Word Tracker"></iframe>';
+    $("viewer-url").textContent = viewerUrl;
+    $("embed-url").textContent = embedUrl;
+    $("iframe-code").textContent = '<iframe src="' + embedUrl + '" width="100%" height="280" frameborder="0" title="Word Tracker"></iframe>';
 
     document.querySelectorAll(".copy-url").forEach(button => {
       button.addEventListener("click", async () => {
