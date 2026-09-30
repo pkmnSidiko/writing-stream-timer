@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Countdown · TLC Storyworks</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="../links.css">
+</head>
+<body data-tool="countdown">
+  <a class="back-link" href="../">← Writing Tools</a>
+  <main class="countdown-shell" id="top">
+    <section class="countdown-card" aria-labelledby="countdown-title">
+      <div class="eyebrow" id="countdown-label">Countdown</div>
+      <h1 id="countdown-title">Ready</h1>
+      <div class="time" id="time" role="timer" aria-label="0 seconds remaining">00:00</div>
+      <p id="countdown-status" class="countdown-status">Set a duration or target time to begin.</p>
+      <div id="live-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+    </section>
+    <section class="controls" aria-label="Countdown controls">
+      <button id="start" class="primary">Start</button>
+      <button id="pause">Pause</button>
+      <button id="reset">Reset</button>
+      <button id="configure" class="secondary">Configure</button>
+    </section>
+    <details class="usage-help">
+      <summary>Using the countdown elsewhere</summary>
+      <div class="usage-content">
+        <section>
+          <h2>OBS / Streamlabs</h2>
+          <p>Add the countdown as a <strong>Browser Source</strong> using the viewer URL below.</p>
+          <div class="url-box"><code id="viewer-url"></code><button type="button" class="copy-url" data-url="viewer-url">Copy</button></div>
+          <p class="usage-note">Viewer mode hides the controls and uses a transparent background.</p>
+        </section>
+        <section>
+          <h2>Website / Embed</h2>
+          <p>Use the <code>?embed</code> version for a clean embedded countdown.</p>
+          <div class="url-box"><code id="embed-url"></code><button type="button" class="copy-url" data-url="embed-url">Copy</button></div>
+          <div class="code-box"><code id="iframe-code"></code><button type="button" class="copy-url" data-url="iframe-code">Copy iframe</button></div>
+        </section>
+        <section>
+          <h2>Direct use</h2>
+          <p>For the full interactive countdown, use the normal page without a query parameter:</p>
+          <div class="url-box"><code id="direct-url"></code><button type="button" class="copy-url" data-url="direct-url">Copy</button></div>
+        </section>
+      </div>
+    </details>
+  </main>
+  <footer class="site-footer">
+    <p class="copyright">© 2026 TLC Storyworks</p>
+    <nav class="footer-links" aria-label="TLC Storyworks links">
+      <a href="../">← Back</a><a href="../">Home</a>
+      <a href="https://github.com/sponsors/tlcstoryworks">Support project</a>
+      <a href="https://github.com/tlcstoryworks/writer-tools/discussions">Discussions</a>
+      <a href="https://github.com/tlcstoryworks/writer-tools">Repository</a>
+      <a href="#top">Top ↑</a><a href="../SECURITY.md">Security</a><a href="../LICENSE">License</a>
+    </nav>
+  </footer>
+  <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
+    <form method="dialog" id="settings-form" class="settings-card">
+      <div class="settings-header">
+        <div><div class="eyebrow">TLC Storyworks · Writing Tools</div><h2 id="settings-title">Countdown Settings</h2></div>
+        <button type="button" id="close-settings" class="icon-button" aria-label="Close settings">×</button>
+      </div>
+      <div class="settings-grid">
+        <label>Label<input id="setting-label" type="text" maxlength="100"></label>
+        <label>Mode<select id="setting-mode"><option value="duration">Duration</option><option value="target">Target date &amp; time</option></select></label>
+      </div>
+      <fieldset id="duration-fields">
+        <legend>Duration</legend><p class="settings-help">Choose how long the countdown should run.</p>
+        <div class="duration-grid">
+          <label>Hours<input id="setting-hours" type="number" min="0" max="999" step="1"></label>
+          <label>Minutes<input id="setting-minutes" type="number" min="0" max="59" step="1"></label>
+          <label>Seconds<input id="setting-seconds" type="number" min="0" max="59" step="1"></label>
+        </div>
+      </fieldset>
+      <fieldset id="target-fields" hidden>
+        <legend>Target</legend><p class="settings-help">The countdown uses your browser's local date and time.</p>
+        <label>Target date &amp; time<input id="setting-target" type="datetime-local"></label>
+      </fieldset>
+      <fieldset><legend>After zero</legend><label class="check"><input id="setting-count-up" type="checkbox"> Count up after the countdown reaches zero</label></fieldset>
+      <div class="settings-actions">
+        <button type="button" id="restore-defaults" class="danger">Restore defaults</button><span class="settings-spacer"></span>
+        <button type="button" id="cancel-settings">Cancel</button><button type="submit" class="primary">Save &amp; Apply</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="../embed.js"></script>
+  <script src="../theme.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
