@@ -3,53 +3,68 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Writing Stream Timer</title>
+  <meta name="description" content="TLC Storyworks Writing Tools: small, customizable tools for writers and other storytellers.">
+  <title>TLC Storyworks · Writing Tools</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="timer-shell">
-    <section class="timer-card" aria-live="polite">
-      <div class="eyebrow" id="stream-name">Writing Stream</div>
-      <div class="plan-name" id="plan-name">Writing Session</div>
-      <h1 id="stage-name">Ready</h1>
-      <div class="time" id="time">00:00</div>
+  <main class="site-shell">
+    <header class="hero">
+      <p class="eyebrow">TLC Storyworks</p>
+      <h1>Writing Tools</h1>
+      <p class="lede">
+        Small, practical tools for the work of making stories — built to be useful
+        whether you're writing alone, streaming a session, or sharing a workspace with other creators.
+      </p>
+    </header>
 
-      <div class="progress-wrap" id="writing-progress-wrap">
-        <div class="progress-label">
-          <span id="writing-progress-label">Writing progress</span>
-          <span id="writing-progress-percent">0%</span>
-        </div>
-        <div class="progress-track" role="progressbar" aria-label="Writing progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="progress-fill" id="writing-progress"></div>
-        </div>
+    <section class="tools" aria-labelledby="available-tools">
+      <div class="section-heading">
+        <p class="eyebrow">The toolbox</p>
+        <h2 id="available-tools">Available now</h2>
       </div>
 
-      <div class="progress-wrap stream-progress-wrap" id="stream-progress-wrap">
-        <div class="progress-label">
-          <span id="stream-progress-label">Stream progress</span>
-          <span id="stream-progress-percent">0%</span>
+      <a class="tool-card featured" href="timer/">
+        <div class="tool-icon" aria-hidden="true">◷</div>
+        <div>
+          <p class="tool-label">Writing &amp; streaming</p>
+          <h3>Writing Stream Timer</h3>
+          <p>
+            A customizable session timer for writing sprints, body doubling,
+            creative streams, and everyday focused work.
+          </p>
+          <span class="tool-link">Open timer →</span>
         </div>
-        <div class="progress-track" role="progressbar" aria-label="Stream progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="progress-fill" id="stream-progress"></div>
-        </div>
-      </div>
+      </a>
+    </section>
 
-      <div class="meta">
-        <span id="block-count">0 / 0 writing blocks</span>
-        <span id="next-stage">Ready to start</span>
+    <section class="coming-soon" aria-labelledby="future-tools">
+      <div class="section-heading">
+        <p class="eyebrow">Still brewing</p>
+        <h2 id="future-tools">More tools to come</h2>
+      </div>
+      <div class="idea-grid">
+        <div class="idea-card">
+          <h3>Word Tracker</h3>
+          <p>Manual word-count tracking that can work on a stream, a website, or inside another workspace.</p>
+        </div>
+        <div class="idea-card">
+          <h3>Project Tracker</h3>
+          <p>Keep a spoiler-free eye on project progress without needing access to the manuscript itself.</p>
+        </div>
+        <div class="idea-card">
+          <h3>Prompt Tools</h3>
+          <p>Simple generators and writing-game helpers for solo writers and communities.</p>
+        </div>
       </div>
     </section>
 
-    <section class="controls" aria-label="Timer controls">
-      <button id="start">Start</button>
-      <button id="pause">Pause</button>
-      <button id="restart">Restart</button>
-      <button id="skip">Skip</button>
-      <button id="reset">Reset</button>
-    </section>
-    <p class="hint">Add <code>?viewer</code> for a clean viewer overlay.</p>
+    <footer>
+      <p>
+        <strong>TLC Storyworks</strong> is about all stories, not just one writer's stories.
+        These tools are meant to be adaptable, forkable, and useful in different creative spaces.
+      </p>
+    </footer>
   </main>
-  <script src="config.js"></script>
-  <script src="app.js"></script>
 </body>
 </html>
