@@ -106,6 +106,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 
 ## Roadmap
 
+### Foundation
 - [x] Move the timer into its own tool directory
 - [x] Create a toolbox landing page
 - [x] Add viewer and embed URL modes
@@ -113,10 +114,53 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [x] Shared appearance/theme infrastructure
 - [x] Theme presets and configurable colors
 - [ ] Configurable fonts and typography
-- [x] Word tracker
-- [ ] Project/progress tracker
-- [ ] Prompt and writing-game tools
+- [ ] Shared embed/display infrastructure
 - [ ] Documentation for stream software and embeds
+
+### Writing & Progress
+- [x] Word tracker
+- [ ] Writing session / sprint tools
+- [ ] Project and progress tracker
+- [ ] Writing goals and deadlines
+- [ ] Writing log / session history
+- [ ] Optional gentle streak tracking
+- [ ] Chapter tracker
+- [ ] Scene tracker
+- [ ] Book / series tracker
+
+### Prompts & Creative Tools
+- [ ] Who / What / When / Where / Why / How prompt generator
+- [ ] Character prompt generator
+- [ ] Scene prompt generator
+- [ ] Conflict generator
+- [ ] Sensory-detail and five-senses prompts
+- [ ] Random word / object / detail tools
+- [ ] Writing challenge generator
+
+### Challenges & Community
+- [ ] Challenge builder
+- [ ] Challenge tracker
+- [ ] Calendar / challenge progress view
+- [ ] Submission and external-link tracking
+- [ ] Writing games and community helpers
+
+### Stream & Embed Widgets
+- [ ] Current activity widget
+- [ ] Writing goal widget
+- [ ] Session progress widget
+- [ ] Break / chat widget
+- [ ] Minimal stream display widgets
+- [ ] Copyable embed URLs / iframe snippets
+- [ ] OBS / Streamlabs display presets
+
+### Utilities & Accessibility
+- [ ] Random choice / dice / roll tools
+- [ ] Writing math and conversion tools
+- [ ] Countdown widget
+- [ ] Session notes
+- [ ] Large-text and low-stimulation display options
+- [ ] Reduced-motion and high-contrast options
+- [ ] Additional keyboard, screen-reader, and touch testing
 
 ## License
 
