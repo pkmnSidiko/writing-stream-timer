@@ -195,18 +195,17 @@ code {
   background: color-mix(in srgb, var(--theme-text) 8%, transparent);
 }
 
-body.viewer, body.embed { background: transparent; }
+body.viewer { background: transparent; }
 
-body.viewer .timer-shell, body.embed .timer-shell {
+body.viewer .timer-shell {
   width: min(900px, 94vw);
 }
 
-body.viewer .controls, body.viewer .usage-help,
-body.embed .usage-help {
+body.viewer .controls, body.viewer .usage-help {
   display: none;
 }
 
-body.viewer .timer-card, body.embed .timer-card {
+body.viewer .timer-card {
   background: transparent;
   border: 0;
   box-shadow: none;
