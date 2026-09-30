@@ -29,6 +29,29 @@ Open it at:
 
 The timer's schedule is configured in `timer/config.js`.
 
+### Word Tracker
+
+A manual word-count tracker for writers who want to log the words they add without giving the tool access to their manuscript.
+
+- Project name and optional word-count goal
+- Starting count for existing projects
+- Primary “Add words” workflow
+- Optional notes and dates for individual entries
+- Current count, today's words, active-day average, and required pace
+- Optional start and end dates
+- Browser-local history
+- Viewer mode for OBS/Streamlabs
+- Embed mode for websites and other workspaces
+- No manuscript integration or writing-content tracking
+
+Open it at:
+
+- `/word-tracker/` — full tracker and controls
+- `/word-tracker/?viewer` — progress display for streams
+- `/word-tracker/?embed` — clean transparent embed
+
+The tracker stores its project data locally in the browser.
+
 ## Project structure
 
 ```
@@ -40,6 +63,10 @@ The timer's schedule is configured in `timer/config.js`.
 │   ├── style.css
 │   ├── app.js
 │   └── config.js
+├── word-tracker/
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
 └── ...
 ```
 
@@ -84,7 +111,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [ ] More visual themes
 - [ ] Shared configuration/theme infrastructure
 - [ ] Configurable colors and fonts
-- [ ] Word tracker
+- [x] Word tracker
 - [ ] Project/progress tracker
 - [ ] Prompt and writing-game tools
 - [ ] Documentation for stream software and embeds
