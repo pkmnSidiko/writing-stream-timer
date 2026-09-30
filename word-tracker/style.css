@@ -191,41 +191,6 @@ body.viewer .dashboard, body.embed .dashboard { grid-template-columns: 2fr repea
 /* Shared appearance theme */
 
 
-.site-footer {
-  width: min(1000px, 92vw);
-  margin: 1.5rem auto 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--theme-border);
-  text-align: center;
-  font-size: .8rem;
-}
-
-.site-footer .copyright {
-  margin: 0;
-  color: var(--theme-muted);
-}
-
-.site-footer .footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: .5rem 1rem;
-  margin-top: .65rem;
-}
-
-.site-footer a {
-  color: var(--theme-muted);
-  text-decoration: none;
-}
-
-.site-footer a:hover {
-  color: var(--theme-accent);
-  text-decoration: underline;
-}
-
-body.viewer .site-footer,
-body.embed .site-footer { display: none; }
-
 
 /* Accessibility baseline */
 button:focus-visible,
