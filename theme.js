@@ -79,31 +79,106 @@
     button.setAttribute("aria-label","Customize appearance"); document.body.appendChild(button);
 
     const dialog=document.createElement("dialog");
-    dialog.className="theme-dialog"; dialog.id="theme-dialog";
-    dialog.innerHTML=`
-      <form method="dialog" class="theme-card" id="theme-form">
-        <div class="theme-header">
-          <div><div class="eyebrow">TLC Storyworks · Appearance</div><h2>Customize appearance</h2></div>
-          <button type="button" class="theme-close" id="theme-close" aria-label="Close">×</button>
-        </div>
-        <section class="theme-section">
-          <h3>Theme presets</h3>
-          <div class="theme-presets">${Object.entries(PRESETS).map(([key,p]) => `<button type="button" class="theme-preset" data-preset="${key}"><span class="theme-swatch" style="background:${p.accent}"></span>${p.name}</button>`).join("")}</div>
-        </section>
-        <section class="theme-section">
-          <h3>Custom colors</h3>
-          <div class="theme-custom-grid">
-            ${[["Background","bg"],["Panels","panel"],["Panel hover","panelHover"],["Text","text"],["Muted text","muted"],["Accent","accent"],["Accent strong","accentStrong"],["Progress track","track"]].map(([label,key]) => `<label class="theme-field">${label}<span class="theme-field-row"><input id="theme-${key}" type="color" value="${theme[key]}"><code id="theme-${key}-value">${theme[key]}</code></span></label>`).join("")}
-          </div>
-          <p id="theme-contrast" class="theme-contrast"></p>
-        </section>
-        <div class="theme-actions">
-          <button type="button" class="theme-reset" id="theme-reset">Reset to default</button>
-          <span class="theme-spacer"></span>
-          <button type="button" id="theme-cancel">Cancel</button>
-          <button type="submit" class="theme-save">Save &amp; Apply</button>
-        </div>
-      </form>`;
+    dialog.className="theme-dialog";
+    dialog.id="theme-dialog";
+
+    // Build the dialog with DOM APIs rather than innerHTML so values loaded from
+    // localStorage can never be reinterpreted as HTML.
+    const form=document.createElement("form");
+    form.method="dialog";
+    form.className="theme-card";
+    form.id="theme-form";
+
+    const header=document.createElement("div");
+    header.className="theme-header";
+    const headerTitle=document.createElement("div");
+    const eyebrow=document.createElement("div");
+    eyebrow.className="eyebrow";
+    eyebrow.textContent="TLC Storyworks · Appearance";
+    const heading=document.createElement("h2");
+    heading.textContent="Customize appearance";
+    headerTitle.append(eyebrow,heading);
+    const closeButton=document.createElement("button");
+    closeButton.type="button";
+    closeButton.className="theme-close";
+    closeButton.id="theme-close";
+    closeButton.setAttribute("aria-label","Close");
+    closeButton.textContent="×";
+    header.append(headerTitle,closeButton);
+
+    const presetsSection=document.createElement("section");
+    presetsSection.className="theme-section";
+    const presetsHeading=document.createElement("h3");
+    presetsHeading.textContent="Theme presets";
+    const presetsGrid=document.createElement("div");
+    presetsGrid.className="theme-presets";
+    Object.entries(PRESETS).forEach(([key,p])=>{
+      const presetButton=document.createElement("button");
+      presetButton.type="button";
+      presetButton.className="theme-preset";
+      presetButton.dataset.preset=key;
+      const swatch=document.createElement("span");
+      swatch.className="theme-swatch";
+      swatch.style.background=p.accent;
+      presetButton.append(swatch,document.createTextNode(p.name));
+      presetsGrid.appendChild(presetButton);
+    });
+    presetsSection.append(presetsHeading,presetsGrid);
+
+    const customSection=document.createElement("section");
+    customSection.className="theme-section";
+    const customHeading=document.createElement("h3");
+    customHeading.textContent="Custom colors";
+    const customGrid=document.createElement("div");
+    customGrid.className="theme-custom-grid";
+    const colorFields=[
+      ["Background","bg"],["Panels","panel"],["Panel hover","panelHover"],
+      ["Text","text"],["Muted text","muted"],["Accent","accent"],
+      ["Accent strong","accentStrong"],["Progress track","track"]
+    ];
+    colorFields.forEach(([label,key])=>{
+      const field=document.createElement("label");
+      field.className="theme-field";
+      field.appendChild(document.createTextNode(label));
+      const row=document.createElement("span");
+      row.className="theme-field-row";
+      const input=document.createElement("input");
+      input.id="theme-"+key;
+      input.type="color";
+      input.value=theme[key];
+      const value=document.createElement("code");
+      value.id="theme-"+key+"-value";
+      value.textContent=theme[key];
+      row.append(input,value);
+      field.appendChild(row);
+      customGrid.appendChild(field);
+    });
+    const contrastText=document.createElement("p");
+    contrastText.id="theme-contrast";
+    contrastText.className="theme-contrast";
+    customSection.append(customHeading,customGrid,contrastText);
+
+    const actions=document.createElement("div");
+    actions.className="theme-actions";
+    const resetButton=document.createElement("button");
+    resetButton.type="button";
+    resetButton.className="theme-reset";
+    resetButton.id="theme-reset";
+    resetButton.textContent="Reset to default";
+    const spacer=document.createElement("span");
+    spacer.className="theme-spacer";
+    const cancelButton=document.createElement("button");
+    cancelButton.type="button";
+    cancelButton.id="theme-cancel";
+    cancelButton.textContent="Cancel";
+    const saveButton=document.createElement("button");
+    saveButton.type="submit";
+    saveButton.className="theme-save";
+    saveButton.textContent="Save & Apply";
+    actions.append(resetButton,spacer,cancelButton,saveButton);
+
+    form.append(header,presetsSection,customSection,actions);
+    dialog.appendChild(form);
     document.body.appendChild(dialog);
 
     function cancelChanges() {
