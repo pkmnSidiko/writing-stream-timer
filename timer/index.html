@@ -15,7 +15,8 @@
       <div class="eyebrow" id="stream-name">Writing Stream</div>
       <div class="plan-name" id="plan-name">Writing Session</div>
       <h1 id="stage-name" aria-live="polite">Ready</h1>
-      <div class="time" id="time">00:00</div>
+      <div class="time" id="time" role="timer" aria-label="0 minutes 0 seconds remaining">00:00</div>
+      <div id="timer-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
 
       <div class="progress-wrap" id="writing-progress-wrap">
         <div class="progress-label">
@@ -94,12 +95,12 @@
     </nav>
   </footer>
 
-  <dialog id="settings-dialog" class="settings-dialog">
+  <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
     <form method="dialog" id="settings-form" class="settings-card">
       <div class="settings-header">
         <div>
           <div class="eyebrow">TLC Storyworks · Writing Tools</div>
-          <h2>Timer Settings</h2>
+          <h2 id="settings-title">Timer Settings</h2>
         </div>
         <button type="button" id="close-settings" class="icon-button" aria-label="Close settings">×</button>
       </div>
