@@ -31,6 +31,23 @@ Open it at:
 
 The timer's schedule is configured in `timer/config.js`. Use **Appearance** to choose a theme preset or customize the colors and typography.
 
+### Countdown
+
+A customizable countdown for writing sessions, events, streams, and focused work.
+
+- Duration countdowns or target date/time
+- Optional count-up after zero
+- Large display for standalone use
+- Viewer mode for OBS/Streamlabs
+- Embed mode for websites and other workspaces
+- Browser-local settings
+
+Open it at:
+
+- `/countdown/` — full countdown and controls
+- `/countdown/?viewer` — transparent viewer/stream display
+- `/countdown/?embed` — clean transparent embed
+
 ### Word Tracker
 
 A manual word-count tracker for writers who want to log the words they add without giving the tool access to their manuscript.
@@ -66,6 +83,10 @@ The tracker stores its project data locally in the browser. Appearance settings 
 │   ├── app.js
 │   └── config.js
 ├── word-tracker/
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+├── countdown/
 │   ├── index.html
 │   ├── style.css
 │   └── app.js
@@ -163,7 +184,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 ### Utilities & Accessibility
 - [ ] Random choice / dice / roll tools
 - [ ] Writing math and conversion tools
-- [ ] Countdown widget
+- [x] Countdown widget
 - [ ] Session notes
 - [ ] Large-text and low-stimulation display options
 - [ ] Reduced-motion and high-contrast options
