@@ -1,55 +1,87 @@
-# Writing Stream Timer
+# TLC Storyworks · Writing Tools
 
-A customizable browser-based timer for writing sprints, body doubling, and creative streams.
+A small collection of customizable browser-based tools for writers and other storytellers.
 
-Designed for browser sources in OBS/Streamlabs Desktop and for standalone use.
+The goal is to make useful, lightweight tools that can work in several places: standalone in a browser, embedded on a website, used as an OBS/Streamlabs browser source, or adapted for a community.
 
-## Features
+## Current tools
+
+### Writing Stream Timer
+
+A customizable timer for writing sprints, body doubling, creative streams, and focused work.
 
 - Configurable stages and durations
-- Marks any stage as a writing stage
-- Tracks writing progress by time, not word count
+- Marks stages as writing or non-writing
+- Tracks writing progress by scheduled time rather than manuscript content
 - Shows current stage, countdown, writing-block count, and next stage
-- Viewer mode with a transparent background
-- No manuscript integration and no writing-content tracking
-- Static GitHub Pages-friendly site
+- Viewer mode for OBS/Streamlabs
+- Embed mode for websites and other workspaces
+- No manuscript integration or writing-content tracking
+- Static GitHub Pages-friendly setup
 
-## Quick start
+Open it at:
 
-Edit config.js to change the schedule, then open index.html.
+- `/timer/` — full timer and controls
+- `/timer/?viewer` — transparent viewer/stream overlay
+- `/timer/?embed` — clean transparent embed
 
-For a clean browser-source overlay, use:
+The timer's schedule is configured in `timer/config.js`.
 
-    index.html?viewer
+## Project structure
 
-## Customizing
+```
+/
+├── index.html          # Writing Tools landing page
+├── style.css           # Landing page styles
+├── timer/
+│   ├── index.html
+│   ├── style.css
+│   ├── app.js
+│   └── config.js
+└── ...
+```
 
-Each stage looks like:
+Future tools will live in their own folders so each widget can remain small, understandable, and independently useful.
 
-    { name: "Writing Sprint", minutes: 20, writing: true }
+Possible additions include word trackers, project/progress widgets, countdowns, session notes, prompt tools, writing games, and community-focused helpers.
 
-Set writing to true for stages that should count toward writing progress.
+## Design principles
 
-Nothing in this app reads your document, editor, word count, or manuscript. Progress is simply the amount of scheduled writing time completed.
+### Writer-first, not manuscript-first
+
+These tools should not need to read someone's manuscript to be useful. When a tool can work from manual input or configuration, that is the default.
+
+### Platform-neutral
+
+A tool should be useful whether someone is writing in Word, Scrivener, Google Docs, a web editor, Notion, or something else entirely.
+
+### Adaptable
+
+Tools should be easy to customize, fork, theme, and reuse in different communities or creative spaces.
+
+### Small and composable
+
+Rather than building one giant application, this project is a toolbox of focused widgets that can eventually share common infrastructure.
 
 ## GitHub Pages
 
 This repository is intended to be hosted with GitHub Pages.
 
-After enabling Pages for the main branch, the site will be available at:
-
-https://pkmnsidiko.github.io/writing-stream-timer/
+The project site will use the repository's GitHub Pages URL with relative links, so the tools can also be forked without rewriting their paths.
 
 ## Roadmap
 
+- [x] Move the timer into its own tool directory
+- [x] Create a toolbox landing page
+- [x] Add viewer and embed URL modes
 - [ ] More visual themes
-- [ ] Configurable colors/fonts
-- [ ] Multiple progress-bar styles
-- [ ] Optional controller layout
-- [ ] Better mobile/iPad controls
-- [ ] Optional synchronized controller for a second device
+- [ ] Shared configuration/theme infrastructure
+- [ ] Configurable colors and fonts
+- [ ] Word tracker
+- [ ] Project/progress tracker
+- [ ] Prompt and writing-game tools
 - [ ] Accessibility polish
-- [ ] Documentation for stream software setup
+- [ ] Documentation for stream software and embeds
 
 ## License
 
