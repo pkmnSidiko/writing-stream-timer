@@ -21,8 +21,8 @@ body {
   min-height: 100vh;
   background: var(--theme-bg);
   color: var(--theme-text);
-  font-family: "DM Sans", system-ui, sans-serif;
-  line-height: 1.6;
+  font-family: var(--theme-font-family);
+  line-height: var(--theme-line-height);
 }
 
 .site-shell {
@@ -46,7 +46,7 @@ body {
 }
 
 h1, h2, h3 {
-  font-family: "Libre Baskerville", Georgia, serif;
+  font-family: var(--theme-heading-font-family);
   line-height: 1.2;
 }
 
