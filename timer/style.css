@@ -18,9 +18,10 @@ body {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at top, #302236 0%, var(--theme-bg) 55%);
+  background: var(--theme-bg);
   color: var(--theme-text);
   font-family: "DM Sans", system-ui, sans-serif;
+  line-height: 1.6;
 }
 
 .back-link {
