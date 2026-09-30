@@ -172,3 +172,22 @@ footer {
   .idea-grid { grid-template-columns: 1fr; }
   .tool-card { grid-template-columns: 1fr; }
 }
+
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .75rem 1.25rem;
+  margin-top: 1rem;
+}
+
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
