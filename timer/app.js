@@ -105,7 +105,8 @@
     stageIndex: 0,
     remaining: 0,
     running: false,
-    lastTick: null
+    lastTick: null,
+    lastTimeLabel: null
   };
 
   function recalculateTotals() {
@@ -190,7 +191,11 @@
       ? (stagePrefix ? stagePrefix + " " : "") + stage.name
       : "Finished";
     $("time").textContent = formatTime(state.remaining);
-    $("time").setAttribute("aria-label", formatTimeForScreenReader(state.remaining) + " remaining");
+    const timeLabel = formatTimeForScreenReader(state.remaining) + " remaining";
+    if (timeLabel !== state.lastTimeLabel) {
+      $("time").setAttribute("aria-label", timeLabel);
+      state.lastTimeLabel = timeLabel;
+    }
 
     $("writing-progress-percent").textContent = Math.round(writingProgress) + "%";
     $("writing-progress").style.width = writingProgress + "%";
@@ -242,6 +247,7 @@
     if (!stages[state.stageIndex]) return;
     state.remaining = stages[state.stageIndex].minutes * 60;
     state.lastTick = null;
+    state.lastTimeLabel = null;
     render();
     announce((stages[state.stageIndex].name || "Current stage") + " restarted.");
   }
@@ -251,6 +257,7 @@
     state.stageIndex = 0;
     state.remaining = stages[0].minutes * 60;
     state.lastTick = null;
+    state.lastTimeLabel = null;
     render();
     announce("Timer reset. " + (stages[0]?.name || "First stage") + " ready.");
   }
@@ -260,6 +267,7 @@
       state.running = false;
       state.remaining = 0;
       state.lastTick = null;
+      state.lastTimeLabel = null;
       announce("Timer complete.");
       return;
     }
@@ -267,6 +275,7 @@
     state.stageIndex += 1;
     state.remaining = stages[state.stageIndex].minutes * 60;
     state.lastTick = null;
+    state.lastTimeLabel = null;
     announce("Stage changed to " + stages[state.stageIndex].name + ". " + formatTimeForScreenReader(state.remaining) + ".");
   }
 
@@ -282,6 +291,7 @@
     state.stageIndex = 0;
     state.remaining = stages[0].minutes * 60;
     state.lastTick = null;
+    state.lastTimeLabel = null;
     saveConfig();
     render();
   }
