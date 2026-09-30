@@ -161,10 +161,10 @@ input[type="text"], input[type="number"], input[type="date"] {
 
 body.viewer, body.embed { background: transparent; }
 body.viewer .tracker-shell, body.embed .tracker-shell { width: min(900px, 94vw); padding: 1rem; }
-body.viewer .back-link, body.embed .back-link,
-body.viewer .actions, body.embed .actions,
-body.viewer .history-section, body.embed .history-section,
-body.viewer .usage-help, body.embed .usage-help { display: none; }
+body.viewer .back-link,
+body.viewer .actions,
+body.viewer .history-section,
+body.viewer .usage-help { display: none; }
 body.viewer .tracker-header, body.embed .tracker-header { margin-bottom: 1rem; }
 body.viewer .subtitle, body.embed .subtitle { display: none; }
 body.viewer .dashboard, body.embed .dashboard { grid-template-columns: 2fr repeat(2, 1fr); }
