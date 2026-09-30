@@ -47,6 +47,11 @@
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
       if (saved && saved.streamName && Array.isArray(saved.stages) && saved.stages.length) {
+        // Migrate the old personal default without overwriting intentional custom names.
+        if (saved.streamName === "Writing with Ceri") {
+          saved.streamName = "TLC Storyworks";
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+        }
         return normalizeConfig(saved);
       }
     } catch (error) {
@@ -60,7 +65,7 @@
 
   function normalizeConfig(source) {
     return {
-      streamName: String(source.streamName || "Writing Stream"),
+      streamName: String(source.streamName || "TLC Storyworks"),
       planName: String(source.planName || source.name || "Writing Session"),
       stages: source.stages.map(stage => ({
         name: String(stage.name || "Stage"),
@@ -311,7 +316,7 @@
   }
 
   function readSettingsForm() {
-    config.streamName = $("setting-stream-name").value.trim() || "Writing Stream";
+    config.streamName = $("setting-stream-name").value.trim() || "TLC Storyworks";
     config.planName = $("setting-plan-name").value.trim() || "Writing Session";
     config.display = {
       showWritingProgress: $("setting-writing-progress").checked,
