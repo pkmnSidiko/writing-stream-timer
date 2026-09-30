@@ -2,6 +2,7 @@
   "use strict";
 
   const STORAGE_KEY = "tlc-storyworks-public-pomodoro";
+  const THEME_STORAGE_KEY = "tlc-storyworks-theme";
   const params = new URLSearchParams(location.search);
   const viewerMode = params.has("viewer");
 
@@ -63,6 +64,17 @@
   function loadPreset() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved && PRESETS[saved]) presetKey = saved;
+  }
+
+  function getThemePreset() {
+    const requested = params.get("theme");
+    if (requested) return requested;
+    try {
+      const saved = JSON.parse(localStorage.getItem(THEME_STORAGE_KEY));
+      return saved?.preset || "neutral";
+    } catch {
+      return "neutral";
+    }
   }
 
   function reset() {
@@ -171,7 +183,7 @@
     base.hash = "";
     const directUrl = base.href;
     const viewerUrl = new URL(directUrl);
-    viewerUrl.search = "?viewer";
+    viewerUrl.search = "?viewer&theme=" + encodeURIComponent(getThemePreset());
 
     $("direct-url").textContent = directUrl;
     $("viewer-url").textContent = viewerUrl.href;
@@ -183,12 +195,12 @@
           await navigator.clipboard.writeText(source);
           const original = button.textContent;
           button.textContent = "Copied!";
-          announce(button.dataset.url === "iframe-code" ? "Iframe code copied." : "URL copied.");
+          announce("URL copied.");
           setTimeout(() => { button.textContent = original; }, 1200);
         } catch {
           button.textContent = "Copy failed";
           announce("Copy failed.");
-          setTimeout(() => { button.textContent = button.dataset.url === "iframe-code" ? "Copy iframe" : "Copy"; }, 1500);
+          setTimeout(() => { button.textContent = "Copy"; }, 1500);
         }
       });
     });
@@ -226,4 +238,6 @@
       advance();
     }
   });
+
+  window.TLC_PUBLIC_TIMER_THEME = getThemePreset();
 })();
