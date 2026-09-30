@@ -65,6 +65,10 @@ Tools should be easy to customize, fork, theme, and reuse in different communiti
 
 Rather than building one giant application, this project is a toolbox of focused widgets that can eventually share common infrastructure.
 
+### Accessible by design
+
+Accessibility should be part of the foundation, not a final pass. Tools should aim to support keyboard navigation, screen readers, readable contrast and text, reduced motion, touch-friendly controls, responsive layouts, and users with different physical, sensory, and cognitive needs. Optional effects and displays should stay optional when practical.
+
 ## GitHub Pages
 
 This repository is intended to be hosted with GitHub Pages.
@@ -76,13 +80,13 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [x] Move the timer into its own tool directory
 - [x] Create a toolbox landing page
 - [x] Add viewer and embed URL modes
+- [ ] Accessibility foundation and testing
 - [ ] More visual themes
 - [ ] Shared configuration/theme infrastructure
 - [ ] Configurable colors and fonts
 - [ ] Word tracker
 - [ ] Project/progress tracker
 - [ ] Prompt and writing-game tools
-- [ ] Accessibility polish
 - [ ] Documentation for stream software and embeds
 
 ## License
