@@ -163,6 +163,12 @@ footer {
   font-size: .9rem;
 }
 
+.copyright {
+  margin: 0;
+  color: var(--theme-muted);
+  text-align: center;
+}
+
 @media (max-width: 700px) {
   .site-shell { padding-top: 3rem; }
   .hero { padding-bottom: 3rem; }
