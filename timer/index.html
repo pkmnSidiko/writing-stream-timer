@@ -48,7 +48,33 @@
       <button id="reset">Reset</button>
       <button id="configure" class="secondary">Configure</button>
     </section>
-    <p class="hint">Use <code>?viewer</code> for OBS/Streamlabs or <code>?embed</code> for a clean embed.</p>
+    <details class="usage-help">
+      <summary>Using the timer elsewhere</summary>
+      <div class="usage-content">
+        <section>
+          <h2>OBS / Streamlabs</h2>
+          <p>Add the timer as a <strong>Browser Source</strong> using this page with <code>?viewer</code> at the end of the URL.</p>
+          <div class="url-box"><code id="viewer-url"></code><button type="button" class="copy-url" data-url="viewer-url">Copy</button></div>
+          <p class="usage-note">Viewer mode hides the controls and uses a transparent background, so you can place the timer over your stream layout.</p>
+        </section>
+
+        <section>
+          <h2>Website / Embed</h2>
+          <p>Use the <code>?embed</code> version when you want a clean embedded timer on another website or workspace.</p>
+          <div class="url-box"><code id="embed-url"></code><button type="button" class="copy-url" data-url="embed-url">Copy</button></div>
+          <div class="code-box">
+            <code id="iframe-code"></code><button type="button" class="copy-url" data-url="iframe-code">Copy iframe</button>
+          </div>
+          <p class="usage-note">Embed mode hides the timer controls and uses a transparent background. The timer's saved settings are local to the browser where they were configured.</p>
+        </section>
+
+        <section>
+          <h2>Direct use</h2>
+          <p>For a normal interactive timer, just use the timer page without a query parameter:</p>
+          <div class="url-box"><code id="direct-url"></code><button type="button" class="copy-url" data-url="direct-url">Copy</button></div>
+        </section>
+      </div>
+    </details>
   </main>
 
   <dialog id="settings-dialog" class="settings-dialog">
