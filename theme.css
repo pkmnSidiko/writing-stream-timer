@@ -44,7 +44,7 @@
 .theme-custom-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.8rem 1rem; }
 .theme-field { display:grid; gap:.35rem; color:var(--theme-muted); font-size:.85rem; }
 .theme-field-row { display:flex; align-items:center; gap:.55rem; }
-.theme-field input[type=color] { width:2.5rem; height:2.2rem; padding:.15rem; border:1px solid var(--theme-border); border-radius:8px; background:var(--theme-panel-hover); }
+.theme-field input[type=color] { width:44px; height:44px; min-width:44px; padding:.15rem; border:1px solid var(--theme-border); border-radius:8px; background:var(--theme-panel-hover); }
 .theme-field code { flex:1; color:var(--theme-text); background:color-mix(in srgb,var(--theme-text) 8%,transparent); padding:.35rem .45rem; border-radius:6px; }
 .theme-contrast { margin-top:.8rem; color:var(--theme-muted); font-size:.8rem; line-height:1.5; }
 .theme-spacer { flex:1; }
