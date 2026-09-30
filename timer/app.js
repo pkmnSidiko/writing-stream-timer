@@ -420,6 +420,30 @@
     restoreSettingsFocus();
   }
 
+  function setupKeyboardShortcuts() {
+    document.addEventListener("keydown", event => {
+      const target = event.target;
+      const isTextEntry = target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target?.isContentEditable;
+      if (isTextEntry || $("settings-dialog").open || viewerMode || embedMode) return;
+
+      const key = event.key.toLowerCase();
+      if (event.key === " ") {
+        event.preventDefault();
+        state.running ? pause() : start();
+      } else if (key === "r") {
+        event.preventDefault();
+        restart();
+      } else if (key === "s") {
+        event.preventDefault();
+        advance();
+        render();
+      }
+    });
+  }
+
   $("start").addEventListener("click", start);
   $("pause").addEventListener("click", pause);
   $("restart").addEventListener("click", restart);
@@ -464,6 +488,8 @@
   });
 
   if (viewerMode || embedMode) $("configure").style.display = "none";
+
+  setupKeyboardShortcuts();
 
   recalculateTotals();
   state.remaining = stages[0].minutes * 60;
