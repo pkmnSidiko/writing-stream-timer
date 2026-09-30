@@ -370,9 +370,7 @@ body.viewer .timer-shell,
 body.embed .timer-shell { width: min(900px, 94vw); }
 
 body.viewer .controls,
-body.viewer .hint,
-body.embed .controls,
-body.embed .hint { display: none; }
+body.viewer .hint { display: none; }
 
 body.viewer .timer-card,
 body.embed .timer-card {
