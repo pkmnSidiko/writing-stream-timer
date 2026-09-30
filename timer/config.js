@@ -2,22 +2,20 @@
 // Edit this file to customize the timer. No manuscript or writing content is ever read by this app.
 
 const TIMER_CONFIG = {
-  activePlan: "ceri-2-5-hour",
-  streamName: "Writing With Ceri",
+  activePlan: "standard-session",
+  streamName: "Writing Session",
 
   plans: {
-    "ceri-2-5-hour": {
-      name: "Ceri's 2.5 Hour Writing Stream",
+    "standard-session": {
+      name: "Standard Writing Session",
       stages: [
-        { name: "Setup & Chat", minutes: 15, writing: false },
-        { name: "Writing Sprint 1", minutes: 20, writing: true },
-        { name: "Chat & Break", minutes: 10, writing: false },
-        { name: "Writing Sprint 2", minutes: 20, writing: true },
-        { name: "Chat & Break", minutes: 10, writing: false },
-        { name: "Writing Sprint 3", minutes: 20, writing: true },
-        { name: "Chat & Break", minutes: 10, writing: false },
-        { name: "The Last Minute Stretch", minutes: 30, writing: true },
-        { name: "Wrap-Up", minutes: 15, writing: false }
+        { name: "Setup", minutes: 10, writing: false },
+        { name: "Writing Sprint 1", minutes: 25, writing: true },
+        { name: "Break", minutes: 5, writing: false },
+        { name: "Writing Sprint 2", minutes: 25, writing: true },
+        { name: "Break", minutes: 5, writing: false },
+        { name: "Writing Sprint 3", minutes: 25, writing: true },
+        { name: "Wrap-Up", minutes: 10, writing: false }
       ]
     },
 
@@ -42,8 +40,8 @@ const TIMER_CONFIG = {
   },
 
   labels: {
-    writingIcon: "✍️",
-    breakIcon: "☕",
+    writingIcon: "Writing",
+    breakIcon: "Break",
     nextPrefix: "Next",
     writingProgressLabel: "Writing progress",
     streamProgressLabel: "Stream progress"
