@@ -5,7 +5,7 @@
   const viewerMode = TLC_EMBED.viewer, embedMode = TLC_EMBED.embed;
   TLC_EMBED.applyMode();
   const $ = id => document.getElementById(id);
-  const state = { config:loadConfig(), remaining:0, running:false, finished:false, lastTick:null, lastTimeLabel:null, settingsOpener:null };
+  const state = { config:loadConfig(), remaining:0, running:false, finished:false, finishedAt:null, lastTick:null, lastTimeLabel:null, settingsOpener:null };
 
   function normalize(source) {
     return {
@@ -30,9 +30,11 @@
     return h>0 ? String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0") : String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
   }
   function announce(message) { $("live-status").textContent=""; requestAnimationFrame(()=>{$("live-status").textContent=message;}); }
-  function resetState() { state.running=false; state.finished=false; state.lastTick=null; state.remaining=state.config.mode==="target"?targetSeconds():durationSeconds(); render(); }
+  function resetState() { state.running=false; state.finished=false; state.finishedAt=null; state.lastTick=null; state.remaining=state.config.mode==="target"?targetSeconds():durationSeconds(); render(); }
   function render() {
-    const display=Math.max(0,state.finished && state.config.countUp ? -state.remaining : state.remaining);
+    const display=state.finished && state.config.countUp && state.finishedAt
+      ? Math.max(0,(Date.now()-state.finishedAt)/1000)
+      : Math.max(0,state.remaining);
     $("countdown-label").textContent=state.config.label;
     $("countdown-title").textContent=state.finished ? (state.config.countUp ? "Time's up" : "Finished") : (state.running ? "Running" : "Ready");
     $("time").textContent=formatTime(display);
@@ -42,10 +44,16 @@
     $("start").disabled=state.running; $("pause").disabled=!state.running;
   }
   function tick(now) {
-    if(!state.running) return;
+    if(!state.running) {
+      if(state.finished && state.config.countUp) {
+        render();
+        requestAnimationFrame(tick);
+      }
+      return;
+    }
     if(state.config.mode==="target") state.remaining=(Date.parse(state.config.target)-Date.now())/1000;
     else { if(state.lastTick===null) state.lastTick=now; state.remaining-=(now-state.lastTick)/1000; state.lastTick=now; }
-    if(state.remaining<=0) { state.running=false; state.finished=true; state.lastTick=null; announce("Countdown finished."); }
+    if(state.remaining<=0) { state.running=false; state.finishedAt=Date.now(); state.finished=true; state.lastTick=null; announce("Countdown finished."); }
     render(); if(state.running) requestAnimationFrame(tick);
   }
   function start() {
