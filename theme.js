@@ -23,6 +23,7 @@
     return { ...DEFAULT_THEME };
   }
   let theme = load();
+  let originalTheme = null;
 
   function luminance(hex) {
     const value = String(hex).replace("#","");
@@ -94,9 +95,17 @@
       </form>`;
     document.body.appendChild(dialog);
 
-    button.addEventListener("click",()=>{ populate(); dialog.showModal(); });
-    $("theme-close").addEventListener("click",()=>dialog.close());
-    $("theme-cancel").addEventListener("click",()=>dialog.close());
+    function cancelChanges() {
+      if (originalTheme) {
+        theme = { ...originalTheme };
+        apply();
+      }
+      originalTheme = null;
+      dialog.close();
+    }
+    button.addEventListener("click",()=>{ originalTheme = { ...theme }; populate(); dialog.showModal(); });
+    $("theme-close").addEventListener("click",cancelChanges);
+    $("theme-cancel").addEventListener("click",cancelChanges);
     document.querySelectorAll(".theme-preset").forEach(btn=>btn.addEventListener("click",()=>{
       theme={...theme,...PRESETS[btn.dataset.preset]}; apply(); populate();
     }));
@@ -104,8 +113,8 @@
       theme[key]=event.target.value; theme.preset="custom"; apply(); updateContrast(); $("theme-"+key+"-value").textContent=event.target.value;
     }));
     $("theme-reset").addEventListener("click",()=>{theme={...DEFAULT_THEME};apply();populate();});
-    $("theme-form").addEventListener("submit",event=>{event.preventDefault();save();dialog.close();});
-    dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close();});
+    $("theme-form").addEventListener("submit",event=>{event.preventDefault();save();originalTheme=null;dialog.close();});
+    dialog.addEventListener("click",event=>{if(event.target===dialog)cancelChanges();});
   }
 
   apply();
