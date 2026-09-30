@@ -46,9 +46,69 @@
       <button id="restart">Restart</button>
       <button id="skip">Skip</button>
       <button id="reset">Reset</button>
+      <button id="configure" class="secondary">Configure</button>
     </section>
     <p class="hint">Use <code>?viewer</code> for OBS/Streamlabs or <code>?embed</code> for a clean embed.</p>
   </main>
+
+  <dialog id="settings-dialog" class="settings-dialog">
+    <form method="dialog" id="settings-form" class="settings-card">
+      <div class="settings-header">
+        <div>
+          <div class="eyebrow">TLC Storyworks · Writing Tools</div>
+          <h2>Timer Settings</h2>
+        </div>
+        <button type="button" id="close-settings" class="icon-button" aria-label="Close settings">×</button>
+      </div>
+
+      <div class="settings-grid">
+        <label>
+          Stream name
+          <input id="setting-stream-name" type="text" maxlength="100">
+        </label>
+        <label>
+          Plan name
+          <input id="setting-plan-name" type="text" maxlength="100">
+        </label>
+      </div>
+
+      <fieldset>
+        <legend>Stages</legend>
+        <p class="settings-help">Build the session you want. Times are in minutes. Turn “Writing” on for stages that count toward writing progress.</p>
+        <div id="stage-list" class="stage-list"></div>
+        <button type="button" id="add-stage" class="add-stage">+ Add stage</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Display</legend>
+        <div class="checkbox-grid">
+          <label class="check"><input id="setting-writing-progress" type="checkbox"> Show writing progress</label>
+          <label class="check"><input id="setting-stream-progress" type="checkbox"> Show stream progress</label>
+          <label class="check"><input id="setting-next-stage" type="checkbox"> Show next stage</label>
+          <label class="check"><input id="setting-plan-display" type="checkbox"> Show plan name</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Labels</legend>
+        <div class="settings-grid">
+          <label>Writing icon <input id="setting-writing-icon" type="text" maxlength="8"></label>
+          <label>Break icon <input id="setting-break-icon" type="text" maxlength="8"></label>
+          <label>Next prefix <input id="setting-next-prefix" type="text" maxlength="30"></label>
+          <label>Writing progress label <input id="setting-writing-label" type="text" maxlength="50"></label>
+          <label>Stream progress label <input id="setting-stream-label" type="text" maxlength="50"></label>
+        </div>
+      </fieldset>
+
+      <div class="settings-actions">
+        <button type="button" id="restore-defaults" class="danger">Restore defaults</button>
+        <span class="settings-spacer"></span>
+        <button type="button" id="cancel-settings">Cancel</button>
+        <button type="submit" class="primary">Save &amp; Apply</button>
+      </div>
+    </form>
+  </dialog>
+
   <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
