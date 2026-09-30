@@ -12,24 +12,23 @@ TLC Storyworks is also an open community project. If you have ideas, feedback, o
 
 ### Writing Stream Timer
 
-A customizable timer for writing sprints, body doubling, creative streams, and focused work.
+A simple Pomodoro timer for writing sprints, body doubling, creative streams, and focused work.
 
-- Configurable stages and durations
-- Marks stages as writing or non-writing
-- Tracks writing progress by scheduled time rather than manuscript content
-- Shows current stage, countdown, writing-block count, and next stage
+- Fixed Pomodoro presets: 25/5, 15/5, and 50/10
+- Includes short breaks and a longer break at the end of each session
 - Viewer mode for OBS/Streamlabs
 - Embed mode for websites and other workspaces
+- Appearance themes and configurable colors/typography
 - No manuscript integration or writing-content tracking
 - Static GitHub Pages-friendly setup
 
 Open it at:
 
-- `/timer/` — full timer and controls
+- `/timer/` — public Pomodoro timer and controls
 - `/timer/?viewer` — transparent viewer/stream overlay
 - `/timer/?embed` — interactive transparent embed
 
-The timer's schedule is configured in `timer/config.js`. Use **Appearance** to choose a theme preset or customize the colors and typography.
+Ceri's configurable stream timer lives at an unlinked direct URL under `/timer/ceri/`. It is not linked from the public toolbox and is intended as a personal workflow tool.
 
 ### Countdown
 
@@ -78,10 +77,13 @@ The tracker stores its project data locally in the browser. Appearance settings 
 ├── index.html          # Writing Tools landing page
 ├── style.css           # Landing page styles
 ├── timer/
-│   ├── index.html
-│   ├── style.css
-│   ├── app.js
-│   └── config.js
+│   ├── index.html          # public fixed Pomodoro timer
+│   ├── public-style.css
+│   ├── public-app.js
+│   ├── style.css           # private configurable timer styles
+│   ├── app.js              # private configurable timer app
+│   ├── config.js
+│   └── ceri/               # unlinked personal timer page
 ├── word-tracker/
 │   ├── index.html
 │   ├── style.css
