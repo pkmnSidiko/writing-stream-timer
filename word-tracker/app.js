@@ -10,6 +10,13 @@
   if (embedMode) document.body.classList.add("embed");
 
   const $ = id => document.getElementById(id);
+  const dialogOpeners = new Map();
+
+  function restoreDialogFocus(dialog) {
+    const opener = dialogOpeners.get(dialog);
+    dialogOpeners.delete(dialog);
+    if (opener && document.contains(opener)) opener.focus();
+  }
 
   function uid() {
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -191,12 +198,14 @@
     });
   }
 
-  function openDialog(dialog) {
+  function openDialog(dialog, opener = document.activeElement) {
+    dialogOpeners.set(dialog, opener);
     if (!dialog.open) dialog.showModal();
   }
 
   function closeDialog(dialog) {
     if (dialog.open) dialog.close();
+    restoreDialogFocus(dialog);
   }
 
   function populateSettings() {
@@ -284,6 +293,7 @@
   $("settings").addEventListener("click", () => {
     populateSettings();
     openDialog($("settings-dialog"));
+    setTimeout(() => $("setting-project-name").focus(), 0);
   });
 
   $("settings-form").addEventListener("submit", event => {
@@ -311,10 +321,15 @@
   });
 
   function wireClose(dialogId, closeId, cancelId) {
-    $(closeId).addEventListener("click", () => closeDialog($(dialogId)));
-    $(cancelId).addEventListener("click", () => closeDialog($(dialogId)));
-    $(dialogId).addEventListener("click", event => {
-      if (event.target === $(dialogId)) closeDialog($(dialogId));
+    const dialog = $(dialogId);
+    $(closeId).addEventListener("click", () => closeDialog(dialog));
+    $(cancelId).addEventListener("click", () => closeDialog(dialog));
+    dialog.addEventListener("cancel", event => {
+      event.preventDefault();
+      closeDialog(dialog);
+    });
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) closeDialog(dialog);
     });
   }
 
