@@ -189,6 +189,21 @@ footer {
   text-decoration: none;
 }
 
+.coming-soon > .tool-link a {
+  color: var(--theme-accent-strong);
+  font-weight: 700;
+}
+
+.coming-soon > .tool-link a:hover {
+  color: var(--theme-text);
+  text-decoration: underline;
+}
+
+.coming-soon > .tool-link a:focus-visible {
+  outline: 2px solid var(--theme-accent-strong);
+  outline-offset: 4px;
+}
+
 .footer-links a:hover {
   color: var(--theme-accent);
   text-decoration: underline;
