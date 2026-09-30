@@ -18,7 +18,7 @@
       <p id="project-subtitle" class="subtitle">Track the words you add without giving the tool access to your manuscript.</p>
     </header>
 
-    <section class="dashboard" aria-live="polite">
+    <section class="dashboard" aria-label="Project statistics">
       <div class="stat-card stat-primary">
         <span class="stat-label">Current words</span>
         <strong id="current-total">0</strong>
@@ -40,6 +40,7 @@
         <span id="days-remaining" class="stat-detail">No deadline</span>
       </div>
     </section>
+    <div id="tracker-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
 
     <section id="goal-section" class="goal-section" hidden>
       <div class="progress-label">
@@ -66,7 +67,7 @@
         <button id="clear-history" class="text-button">Clear history</button>
       </div>
       <div id="history-empty" class="empty-state">No words logged yet. When you write something, come back and add the words here.</div>
-      <div id="history-list" class="history-list"></div>
+      <div id="history-list" class="history-list" role="list"></div>
     </section>
 
     <details class="usage-help">
@@ -107,10 +108,10 @@
     </nav>
   </footer>
 
-  <dialog id="entry-dialog" class="settings-dialog">
+  <dialog id="entry-dialog" class="settings-dialog" aria-labelledby="entry-title">
     <form method="dialog" id="entry-form" class="settings-card">
       <div class="settings-header">
-        <div><div class="eyebrow">Word Tracker</div><h2>Add words</h2></div>
+        <div><div class="eyebrow">Word Tracker</div><h2 id="entry-title">Add words</h2></div>
         <button type="button" id="close-entry" class="icon-button" aria-label="Close">×</button>
       </div>
       <div class="settings-grid">
@@ -122,10 +123,10 @@
     </form>
   </dialog>
 
-  <dialog id="total-dialog" class="settings-dialog">
+  <dialog id="total-dialog" class="settings-dialog" aria-labelledby="total-title">
     <form method="dialog" id="total-form" class="settings-card">
       <div class="settings-header">
-        <div><div class="eyebrow">Word Tracker</div><h2>Set total</h2></div>
+        <div><div class="eyebrow">Word Tracker</div><h2 id="total-title">Set total</h2></div>
         <button type="button" id="close-total" class="icon-button" aria-label="Close">×</button>
       </div>
       <p class="dialog-help">Use this when you need to correct or import your current word count. Existing entries stay in the history.</p>
@@ -134,10 +135,10 @@
     </form>
   </dialog>
 
-  <dialog id="settings-dialog" class="settings-dialog">
+  <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
     <form method="dialog" id="settings-form" class="settings-card">
       <div class="settings-header">
-        <div><div class="eyebrow">TLC Storyworks · Writing Tools</div><h2>Project Settings</h2></div>
+        <div><div class="eyebrow">TLC Storyworks · Writing Tools</div><h2 id="settings-title">Project Settings</h2></div>
         <button type="button" id="close-settings" class="icon-button" aria-label="Close">×</button>
       </div>
       <div class="settings-grid">
