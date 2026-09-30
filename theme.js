@@ -4,11 +4,13 @@
   const STORAGE_KEY = "tlc-storyworks-theme";
   const DEFAULT_THEME = {
     preset: "tlc", bg:"#17131a", panel:"#241d29", panelHover:"#2d2433",
-    text:"#f7f1f5", muted:"#c6b8c5", accent:"#d7a9c9", accentStrong:"#efc8df", track:"#3a2e3d"
+    text:"#f7f1f5", muted:"#c6b8c5", accent:"#d7a9c9", accentStrong:"#efc8df", track:"#3a2e3d",
+    fontFamily:"dm-sans", headingFontFamily:"libre-baskerville", textScale:"1", lineHeight:"1.6"
   };
   const TIMER_DEFAULT_THEME = {
     name:"Timer Neutral", preset:"neutral", bg:"#f2f2f0", panel:"#ffffff", panelHover:"#e7e7e4",
-    text:"#202020", muted:"#5f5f5b", accent:"#555555", accentStrong:"#303030", track:"#d0d0cc"
+    text:"#202020", muted:"#5f5f5b", accent:"#555555", accentStrong:"#303030", track:"#d0d0cc",
+    fontFamily:"system-sans", headingFontFamily:"system-serif", textScale:"1", lineHeight:"1.6"
   };
   const PRESETS = {
     tlc: { name:"TLC Storyworks", ...DEFAULT_THEME },
@@ -23,6 +25,18 @@
     contrast: { name:"High Contrast", preset:"contrast", bg:"#000000", panel:"#111111", panelHover:"#222222", text:"#ffffff", muted:"#e8e8e8", accent:"#ffff00", accentStrong:"#ffff00", track:"#666666" }
   };
   const KEYS = ["bg","panel","panelHover","text","muted","accent","accentStrong","track"];
+  const FONT_OPTIONS = {
+    "system-sans": { label:"System Sans", family:"system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif", google:null },
+    "system-serif": { label:"System Serif", family:"Georgia, \"Times New Roman\", serif", google:null },
+    "dm-sans": { label:"DM Sans", family:"\"DM Sans\", system-ui, sans-serif", google:"DM+Sans:wght@400;500;700" },
+    "atkinson": { label:"Atkinson Hyperlegible", family:"\"Atkinson Hyperlegible\", system-ui, sans-serif", google:"Atkinson+Hyperlegible:wght@400;700" },
+    "nunito-sans": { label:"Nunito Sans", family:"\"Nunito Sans\", system-ui, sans-serif", google:"Nunito+Sans:wght@400;600;700" },
+    "lora": { label:"Lora", family:"\"Lora\", Georgia, serif", google:"Lora:wght@400;500;600;700" },
+    "libre-baskerville": { label:"Libre Baskerville", family:"\"Libre Baskerville\", Georgia, serif", google:"Libre+Baskerville:wght@400;700" },
+    "jetbrains-mono": { label:"JetBrains Mono", family:"\"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace", google:"JetBrains+Mono:wght@400;500;700" }
+  };
+  const TEXT_SCALE_OPTIONS = [["0.9","90%"],["1","100%"],["1.1","110%"],["1.25","125%"],["1.5","150%"]];
+  const LINE_HEIGHT_OPTIONS = [["1.4","Compact"],["1.6","Comfortable"],["1.8","Relaxed"],["2","Loose"]];
   const $ = id => document.getElementById(id);
 
   function load() {
@@ -47,6 +61,23 @@
     const x=luminance(a), y=luminance(b);
     return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);
   }
+  function loadFonts() {
+    const families = [...new Set([theme.fontFamily, theme.headingFontFamily])]
+      .map(key => FONT_OPTIONS[key]?.google).filter(Boolean);
+    const href = families.length
+      ? "https://fonts.googleapis.com/css2?family=" + families.join("&family=") + "&display=swap"
+      : "";
+    let link = document.getElementById("tlc-google-fonts");
+    if (!href) { if (link) link.remove(); return; }
+    if (!link) {
+      link = document.createElement("link");
+      link.id = "tlc-google-fonts";
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }
+    if (link.href !== new URL(href, document.baseURI).href) link.href = href;
+  }
+
   function apply() {
     const root=document.documentElement;
     root.style.setProperty("--theme-bg",theme.bg);
@@ -58,6 +89,13 @@
     root.style.setProperty("--theme-accent-strong",theme.accentStrong);
     root.style.setProperty("--theme-track",theme.track);
     root.style.setProperty("--theme-border","color-mix(in srgb, "+theme.text+" 12%, transparent)");
+    const bodyFont = FONT_OPTIONS[theme.fontFamily] || FONT_OPTIONS["system-sans"];
+    const headingFont = FONT_OPTIONS[theme.headingFontFamily] || FONT_OPTIONS["system-serif"];
+    root.style.setProperty("--theme-font-family", bodyFont.family);
+    root.style.setProperty("--theme-heading-font-family", headingFont.family);
+    root.style.setProperty("--theme-text-scale", theme.textScale || "1");
+    root.style.setProperty("--theme-line-height", theme.lineHeight || "1.6");
+    loadFonts();
     document.body.dataset.theme=theme.preset;
   }
   function save(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(theme)); }
@@ -66,6 +104,10 @@
       $("theme-"+key).value=theme[key];
       $("theme-"+key+"-value").textContent=theme[key];
     });
+    $("theme-font-family").value=theme.fontFamily;
+    $("theme-heading-font-family").value=theme.headingFontFamily;
+    $("theme-text-scale").value=theme.textScale;
+    $("theme-line-height").value=theme.lineHeight;
     updateContrast();
   }
   function updateContrast(){
@@ -160,6 +202,39 @@
     contrastText.className="theme-contrast";
     customSection.append(customHeading,customGrid,contrastText);
 
+    const typographySection=document.createElement("section");
+    typographySection.className="theme-section";
+    const typographyHeading=document.createElement("h3");
+    typographyHeading.textContent="Typography";
+    const typographyGrid=document.createElement("div");
+    typographyGrid.className="theme-typography-grid";
+    const selectField=(labelText,id,options,value)=>{
+      const field=document.createElement("label");
+      field.className="theme-field";
+      field.appendChild(document.createTextNode(labelText));
+      const select=document.createElement("select");
+      select.id=id;
+      options.forEach(([optionValue,label])=>{
+        const option=document.createElement("option");
+        option.value=optionValue; option.textContent=label;
+        select.appendChild(option);
+      });
+      select.value=value;
+      field.appendChild(select);
+      return field;
+    };
+    const fontOptions=Object.entries(FONT_OPTIONS).map(([key,font])=>[key,font.label]);
+    typographyGrid.append(
+      selectField("Body font","theme-font-family",fontOptions,theme.fontFamily),
+      selectField("Heading font","theme-heading-font-family",fontOptions,theme.headingFontFamily),
+      selectField("Text size","theme-text-scale",TEXT_SCALE_OPTIONS,theme.textScale),
+      selectField("Line spacing","theme-line-height",LINE_HEIGHT_OPTIONS,theme.lineHeight)
+    );
+    const typographyHelp=document.createElement("p");
+    typographyHelp.className="theme-typography-help";
+    typographyHelp.textContent="Font choices use Google Fonts when available and fall back to system fonts. No manuscript or writing content is sent to Google Fonts.";
+    typographySection.append(typographyHeading,typographyGrid,typographyHelp);
+
     const actions=document.createElement("div");
     actions.className="theme-actions";
     const resetButton=document.createElement("button");
@@ -179,7 +254,7 @@
     saveButton.textContent="Save & Apply";
     actions.append(resetButton,spacer,cancelButton,saveButton);
 
-    form.append(header,presetsSection,customSection,actions);
+    form.append(header,presetsSection,customSection,typographySection,actions);
     dialog.appendChild(form);
     document.body.appendChild(dialog);
 
@@ -205,6 +280,10 @@
     KEYS.forEach(key=>$("theme-"+key).addEventListener("input",event=>{
       theme[key]=event.target.value; theme.preset="custom"; apply(); updateContrast(); $("theme-"+key+"-value").textContent=event.target.value;
     }));
+    $("theme-font-family").addEventListener("change",event=>{theme.fontFamily=event.target.value;theme.preset="custom";apply();});
+    $("theme-heading-font-family").addEventListener("change",event=>{theme.headingFontFamily=event.target.value;theme.preset="custom";apply();});
+    $("theme-text-scale").addEventListener("change",event=>{theme.textScale=event.target.value;theme.preset="custom";apply();});
+    $("theme-line-height").addEventListener("change",event=>{theme.lineHeight=event.target.value;theme.preset="custom";apply();});
     $("theme-reset").addEventListener("click",()=>{theme={...(document.body.dataset.tool === "timer" ? TIMER_DEFAULT_THEME : DEFAULT_THEME)};apply();populate();});
     $("theme-form").addEventListener("submit",event=>{
       event.preventDefault();
