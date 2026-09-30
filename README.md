@@ -17,7 +17,6 @@ A simple Pomodoro timer for writing sprints, body doubling, creative streams, an
 - Fixed Pomodoro presets: 25/5, 15/5, and 50/10
 - Includes short breaks and a longer break at the end of each session
 - Viewer mode for OBS/Streamlabs
-- Embed mode for websites and other workspaces
 - Appearance themes and configurable colors/typography
 - No manuscript integration or writing-content tracking
 - Static GitHub Pages-friendly setup
@@ -26,7 +25,6 @@ Open it at:
 
 - `/timer/` — public Pomodoro timer and controls
 - `/timer/?viewer` — transparent viewer/stream overlay
-- `/timer/?embed` — interactive transparent embed
 
 Ceri's configurable stream timer lives at an unlinked direct URL under `/timer/ceri/`. It is not linked from the public toolbox and is intended as a personal workflow tool.
 
