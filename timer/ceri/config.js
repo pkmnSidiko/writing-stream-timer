@@ -1,6 +1,7 @@
 const TIMER_CONFIG = {
   activePlan: "ceri-session",
   streamName: "TLC Storyworks",
+  planName: "Ceri's Writing Session",
   plans: {
     "ceri-session": {
       name: "Ceri's Writing Session",
