@@ -201,7 +201,8 @@ body.viewer .timer-shell {
   width: min(900px, 94vw);
 }
 
-body.viewer .controls, body.viewer .usage-help {
+body.viewer .controls, body.viewer .usage-help,
+body.viewer .theme-button {
   display: none;
 }
 
