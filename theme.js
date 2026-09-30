@@ -93,7 +93,7 @@
           <p id="theme-contrast" class="theme-contrast"></p>
         </section>
         <div class="theme-actions">
-          <button type="button" class="theme-reset" id="theme-reset">Reset to TLC Storyworks</button>
+          <button type="button" class="theme-reset" id="theme-reset">Reset to default</button>
           <span class="theme-spacer"></span>
           <button type="button" id="theme-cancel">Cancel</button>
           <button type="submit" class="theme-save">Save &amp; Apply</button>
