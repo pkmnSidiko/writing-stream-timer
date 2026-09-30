@@ -13,8 +13,8 @@
   const PRESETS = {
     tlc: { name:"TLC Storyworks", ...DEFAULT_THEME },
     neutral: TIMER_DEFAULT_THEME,
-    light: { name:"Light", preset:"light", bg:"#f5f1f4", panel:"#ffffff", panelHover:"#eee7ec", text:"#241d29", muted:"#625966", accent:"#8b4f7b", accentStrong:"#6d3b60", track:"#ded4dc" },
-    dark: { name:"Dark", preset:"dark", bg:"#0f1115", panel:"#1a1e25", panelHover:"#252b34", text:"#f4f6f8", muted:"#b7bec8", accent:"#8bb8ff", accentStrong:"#b5d2ff", track:"#343b47" },
+    light: { name:"Light", preset:"light", bg:"#f5f1e8", panel:"#fffdf8", panelHover:"#eee8dc", text:"#2b2924", muted:"#6b665c", accent:"#9a7a45", accentStrong:"#765b2f", track:"#ddd4c4" },
+    dark: { name:"Dark", preset:"dark", bg:"#0e141c", panel:"#18212d", panelHover:"#222e3c", text:"#f3f7fb", muted:"#b7c2ce", accent:"#86b8e8", accentStrong:"#b5d6f5", track:"#344454" },
     contrast: { name:"High Contrast", preset:"contrast", bg:"#000000", panel:"#111111", panelHover:"#222222", text:"#ffffff", muted:"#e8e8e8", accent:"#ffff00", accentStrong:"#ffff00", track:"#666666" }
   };
   const KEYS = ["bg","panel","panelHover","text","muted","accent","accentStrong","track"];
