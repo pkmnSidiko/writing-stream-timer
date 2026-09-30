@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A flexible manual word-count tracker for writers and other storytellers.">
+  <title>Word Tracker · TLC Storyworks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="back-link" href="../">← Writing Tools</a>
+
+  <main class="tracker-shell">
+    <header class="tracker-header">
+      <p class="eyebrow">TLC Storyworks · Writing Tools</p>
+      <h1 id="project-title">Word Tracker</h1>
+      <p id="project-subtitle" class="subtitle">Track the words you add without giving the tool access to your manuscript.</p>
+    </header>
+
+    <section class="dashboard" aria-live="polite">
+      <div class="stat-card stat-primary">
+        <span class="stat-label">Current words</span>
+        <strong id="current-total">0</strong>
+        <span id="goal-summary" class="stat-detail">No goal set</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Today</span>
+        <strong id="today-total">0</strong>
+        <span id="today-target" class="stat-detail">No daily target</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Average</span>
+        <strong id="average-total">0</strong>
+        <span class="stat-detail">words / active day</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Required pace</span>
+        <strong id="required-pace">—</strong>
+        <span id="days-remaining" class="stat-detail">No deadline</span>
+      </div>
+    </section>
+
+    <section id="goal-section" class="goal-section" hidden>
+      <div class="progress-label">
+        <span id="goal-progress-label">Goal progress</span>
+        <span id="goal-progress-percent">0%</span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Goal progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="goal-progress" class="progress-fill"></div>
+      </div>
+    </section>
+
+    <section class="actions" aria-label="Word tracker actions">
+      <button id="add-words" class="primary">+ Add words</button>
+      <button id="set-total">Set total</button>
+      <button id="settings" class="secondary">Project settings</button>
+    </section>
+
+    <section class="history-section" aria-labelledby="history-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Your log</p>
+          <h2 id="history-heading">Recent entries</h2>
+        </div>
+        <button id="clear-history" class="text-button">Clear history</button>
+      </div>
+      <div id="history-empty" class="empty-state">No words logged yet. When you write something, come back and add the words here.</div>
+      <div id="history-list" class="history-list"></div>
+    </section>
+
+    <details class="usage-help">
+      <summary>Using the tracker elsewhere</summary>
+      <div class="usage-content">
+        <section>
+          <h2>OBS / Streamlabs</h2>
+          <p>Add the tracker as a <strong>Browser Source</strong> using the viewer URL below.</p>
+          <div class="url-box"><code id="viewer-url"></code><button type="button" class="copy-url" data-url="viewer-url">Copy</button></div>
+          <p class="usage-note">Viewer mode shows project progress without the editing controls.</p>
+        </section>
+        <section>
+          <h2>Website / Embed</h2>
+          <p>Use the <code>?embed</code> version for a clean embedded progress display.</p>
+          <div class="url-box"><code id="embed-url"></code><button type="button" class="copy-url" data-url="embed-url">Copy</button></div>
+          <div class="code-box"><code id="iframe-code"></code><button type="button" class="copy-url" data-url="iframe-code">Copy iframe</button></div>
+        </section>
+        <section>
+          <h2>Direct use</h2>
+          <p>For the full tracker, use the normal page without a query parameter:</p>
+          <div class="url-box"><code id="direct-url"></code><button type="button" class="copy-url" data-url="direct-url">Copy</button></div>
+        </section>
+      </div>
+    </details>
+  </main>
+
+  <dialog id="entry-dialog" class="settings-dialog">
+    <form method="dialog" id="entry-form" class="settings-card">
+      <div class="settings-header">
+        <div><div class="eyebrow">Word Tracker</div><h2>Add words</h2></div>
+        <button type="button" id="close-entry" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <div class="settings-grid">
+        <label>Words added<input id="entry-words" type="number" min="1" step="1" inputmode="numeric" required></label>
+        <label>Date<input id="entry-date" type="date" required></label>
+      </div>
+      <label class="full-field">Note (optional)<input id="entry-note" type="text" maxlength="160" placeholder="Chapter 4, morning session, etc."></label>
+      <div class="settings-actions"><span class="settings-spacer"></span><button type="button" id="cancel-entry">Cancel</button><button type="submit" class="primary">Add words</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="total-dialog" class="settings-dialog">
+    <form method="dialog" id="total-form" class="settings-card">
+      <div class="settings-header">
+        <div><div class="eyebrow">Word Tracker</div><h2>Set total</h2></div>
+        <button type="button" id="close-total" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <p class="dialog-help">Use this when you need to correct or import your current word count. Existing entries stay in the history.</p>
+      <label>Current total words<input id="total-words" type="number" min="0" step="1" inputmode="numeric" required></label>
+      <div class="settings-actions"><span class="settings-spacer"></span><button type="button" id="cancel-total">Cancel</button><button type="submit" class="primary">Set total</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="settings-dialog" class="settings-dialog">
+    <form method="dialog" id="settings-form" class="settings-card">
+      <div class="settings-header">
+        <div><div class="eyebrow">TLC Storyworks · Writing Tools</div><h2>Project Settings</h2></div>
+        <button type="button" id="close-settings" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <div class="settings-grid">
+        <label>Project name<input id="setting-project-name" type="text" maxlength="100" required></label>
+        <label>Word-count goal (optional)<input id="setting-goal" type="number" min="0" step="1" inputmode="numeric" placeholder="No goal"></label>
+        <label>Starting word count<input id="setting-starting-count" type="number" min="0" step="1" inputmode="numeric"></label>
+        <label>Daily target (optional)<input id="setting-daily-target" type="number" min="0" step="1" inputmode="numeric" placeholder="No daily target"></label>
+        <label>Start date (optional)<input id="setting-start-date" type="date"></label>
+        <label>End date (optional)<input id="setting-end-date" type="date"></label>
+      </div>
+      <p class="dialog-help">For an existing project, put the words you already have in Starting word count. New words added through the tracker are recorded separately in your history.</p>
+      <div class="settings-actions"><button type="button" id="reset-project" class="danger">Reset project</button><span class="settings-spacer"></span><button type="button" id="cancel-settings">Cancel</button><button type="submit" class="primary">Save settings</button></div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
