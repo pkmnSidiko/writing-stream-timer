@@ -131,8 +131,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [ ] Book / series tracker
 
 ### Prompts & Creative Tools
-- [ ] Who / What / When / Where / Why / How prompt generator
-- [ ] Prompt Deck — digital card-draw system using separate W/W/W/W/W/H decks
+- [ ] Prompt Generator / Prompt Deck — dice, card, or mixed generation using separate Who / What / When / Where / Why / How prompt pools
 - [ ] Character prompt generator
 - [ ] Scene prompt generator
 - [ ] Conflict generator
