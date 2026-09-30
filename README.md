@@ -138,6 +138,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [ ] Sensory-detail and five-senses prompts
 - [ ] Random word / object / detail tools
 - [ ] Writing challenge generator
+- [ ] Book Page Generator — turn pasted excerpts into novel-style page images for sharing
 
 ### Challenges & Community
 - [ ] Challenge builder
