@@ -4,10 +4,8 @@
   const STORAGE_KEY = "tlc-storyworks-public-pomodoro";
   const params = new URLSearchParams(location.search);
   const viewerMode = params.has("viewer");
-  const embedMode = params.has("embed");
 
   if (viewerMode) document.body.classList.add("viewer");
-  if (embedMode) document.body.classList.add("embed");
 
   const PRESETS = {
     classic: { name: "Classic Pomodoro", work: 25, break: 5, rounds: 4, longBreak: 15 },
@@ -174,13 +172,9 @@
     const directUrl = base.href;
     const viewerUrl = new URL(directUrl);
     viewerUrl.search = "?viewer";
-    const embedUrl = new URL(directUrl);
-    embedUrl.search = "?embed";
 
     $("direct-url").textContent = directUrl;
     $("viewer-url").textContent = viewerUrl.href;
-    $("embed-url").textContent = embedUrl.href;
-    $("iframe-code").textContent = '<iframe src="' + embedUrl.href + '" width="100%" height="500" frameborder="0" title="Pomodoro Writing Timer"></iframe>';
 
     document.querySelectorAll(".copy-url").forEach(button => {
       button.addEventListener("click", async () => {
@@ -215,7 +209,7 @@
 
   if (viewerMode) {
     $("preset").closest(".preset-picker").style.display = "none";
-  } else if (!embedMode) {
+  } else {
     setupUsageLinks();
   }
 
