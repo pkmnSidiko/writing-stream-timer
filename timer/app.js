@@ -155,8 +155,11 @@
 
     $("stream-name").textContent = config.streamName;
     $("plan-name").textContent = config.planName;
+    const stagePrefix = stage
+      ? (stage.writing ? config.labels.writingIcon : config.labels.breakIcon).trim()
+      : "";
     $("stage-name").textContent = stage
-      ? (stage.writing ? config.labels.writingIcon : config.labels.breakIcon) + " " + stage.name
+      ? (stagePrefix ? stagePrefix + " " : "") + stage.name
       : "Finished";
     $("time").textContent = formatTime(state.remaining);
 
