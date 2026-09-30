@@ -72,6 +72,7 @@ The tracker stores its project data locally in the browser. Appearance settings 
 ├── theme.css         # Shared appearance/theme styles
 ├── theme.js          # Shared appearance/theme controls
 ├── links.css         # Shared link and navigation styles
+├── embed.js          # Shared viewer/embed mode and URL helpers
 └── ...
 ```
 
