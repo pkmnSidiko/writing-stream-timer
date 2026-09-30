@@ -18,6 +18,11 @@
     if (opener && document.contains(opener)) opener.focus();
   }
 
+  function announce(message) {
+    $("tracker-status").textContent = "";
+    requestAnimationFrame(() => { $("tracker-status").textContent = message; });
+  }
+
   function uid() {
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
     return Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -165,6 +170,7 @@
     entries.forEach(entry => {
       const row = document.createElement("div");
       row.className = "history-entry";
+      row.setAttribute("role", "listitem");
 
       const date = document.createElement("span");
       date.className = "entry-date";
@@ -187,10 +193,18 @@
       remove.type = "button";
       remove.className = "entry-delete";
       remove.textContent = "Remove";
+      const noteForLabel = entry.note ? ", " + entry.note : "";
+      remove.setAttribute(
+        "aria-label",
+        "Remove entry for " + formatDate(entry.date, { month: "long", day: "numeric", year: "numeric" }) +
+        ", " + formatNumber(entry.words) + " words" + noteForLabel
+      );
       remove.addEventListener("click", () => {
         project.entries = project.entries.filter(item => item.id !== entry.id);
         saveProject();
         render();
+        announce("Removed " + formatNumber(entry.words) + " words from " +
+          formatDate(entry.date, { month: "long", day: "numeric", year: "numeric" }) + ".");
       });
 
       row.append(date, content, remove);
@@ -273,6 +287,7 @@
     saveProject();
     closeDialog($("entry-dialog"));
     render();
+    announce("Added " + formatNumber(words) + " words.");
   });
 
   $("set-total").addEventListener("click", () => {
@@ -288,6 +303,7 @@
     saveProject();
     closeDialog($("total-dialog"));
     render();
+    announce("Current total set to " + formatNumber(desired) + " words.");
   });
 
   $("settings").addEventListener("click", () => {
@@ -318,6 +334,7 @@
     saveProject();
     closeDialog($("settings-dialog"));
     render();
+    announce("Project settings saved.");
   });
 
   function wireClose(dialogId, closeId, cancelId) {
@@ -343,6 +360,7 @@
     saveProject();
     closeDialog($("settings-dialog"));
     render();
+    announce("Project reset.");
   });
 
   $("clear-history").addEventListener("click", () => {
@@ -351,6 +369,7 @@
     project.entries = [];
     saveProject();
     render();
+    announce("Word history cleared.");
   });
 
   if (!viewerMode && !embedMode) setupUsageLinks();
