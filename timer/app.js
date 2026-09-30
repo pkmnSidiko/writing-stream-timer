@@ -418,7 +418,7 @@
   }
 
   function openSettings() {
-    if (viewerMode || embedMode) return;
+    if (viewerMode) return;
     settingsOpener = document.activeElement;
     populateSettings();
     $("settings-dialog").showModal();
@@ -440,7 +440,7 @@
       const isInteractiveControl = target instanceof HTMLButtonElement ||
         target instanceof HTMLAnchorElement ||
         target instanceof HTMLElement && target.tagName === "SUMMARY";
-      if (isTextEntry || isInteractiveControl || $("settings-dialog").open || viewerMode || embedMode) return;
+      if (isTextEntry || isInteractiveControl || $("settings-dialog").open || viewerMode) return;
 
       const key = event.key.toLowerCase();
       if (event.key === " ") {
@@ -500,7 +500,7 @@
     if (event.target === $("settings-dialog")) closeSettings();
   });
 
-  if (viewerMode || embedMode) $("configure").style.display = "none";
+  if (viewerMode) $("configure").style.display = "none";
 
   setupKeyboardShortcuts();
 
