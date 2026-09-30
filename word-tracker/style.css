@@ -263,3 +263,13 @@ a:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+.dialog-error {
+  margin: .75rem 0 0;
+  padding: .7rem .8rem;
+  border: 1px solid var(--theme-accent-strong);
+  border-radius: 9px;
+  color: var(--theme-text);
+  background: color-mix(in srgb, var(--theme-accent-strong) 12%, transparent);
+}
