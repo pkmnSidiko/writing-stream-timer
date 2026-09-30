@@ -112,7 +112,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 - [x] Move the timer into its own tool directory
 - [x] Create a toolbox landing page
 - [x] Add viewer and embed URL modes
-- [ ] Accessibility foundation and testing
+- [x] Accessibility foundation and testing
 - [x] Shared appearance/theme infrastructure
 - [x] Theme presets and configurable colors
 - [ ] Configurable fonts and typography
