@@ -314,13 +314,30 @@
     setTimeout(() => $("setting-project-name").focus(), 0);
   });
 
+  function clearSettingsError() {
+    const error = $("settings-error");
+    error.textContent = "";
+    error.hidden = true;
+    $("setting-end-date").setAttribute("aria-invalid", "false");
+  }
+
+  $("setting-start-date").addEventListener("input", clearSettingsError);
+  $("setting-end-date").addEventListener("input", clearSettingsError);
+
   $("settings-form").addEventListener("submit", event => {
     event.preventDefault();
     const endDate = $("setting-end-date").value;
     const startDate = $("setting-start-date").value;
+    const error = $("settings-error");
+
+    clearSettingsError();
 
     if (startDate && endDate && endDate < startDate) {
-      $("setting-end-date").setCustomValidity("End date must be on or after the start date.");
+      const message = "End date must be on or after the start date.";
+      error.textContent = message;
+      error.hidden = false;
+      $("setting-end-date").setAttribute("aria-invalid", "true");
+      $("setting-end-date").setCustomValidity(message);
       $("setting-end-date").reportValidity();
       $("setting-end-date").setCustomValidity("");
       return;
