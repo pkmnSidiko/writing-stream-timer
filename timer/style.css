@@ -113,6 +113,7 @@ h1 {
 }
 
 button {
+  min-height: 44px;
   border: 1px solid var(--theme-border);
   border-radius: 999px;
   padding: .7rem 1.05rem;
@@ -303,6 +304,7 @@ label {
 
 input[type="text"],
 input[type="number"] {
+  min-height: 44px;
   width: 100%;
   border: 1px solid var(--theme-border);
   border-radius: 9px;
