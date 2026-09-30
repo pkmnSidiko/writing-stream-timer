@@ -11,6 +11,12 @@
   if (embedMode) document.body.classList.add("embed");
 
   const $ = id => document.getElementById(id);
+  let settingsOpener = null;
+
+  function restoreSettingsFocus() {
+    if (settingsOpener && document.contains(settingsOpener)) settingsOpener.focus();
+    settingsOpener = null;
+  }
 
   function setupUsageLinks() {
     const baseUrl = new URL(location.href);
@@ -340,12 +346,15 @@
 
   function openSettings() {
     if (viewerMode || embedMode) return;
+    settingsOpener = document.activeElement;
     populateSettings();
     $("settings-dialog").showModal();
+    $("setting-stream-name").focus();
   }
 
   function closeSettings() {
     $("settings-dialog").close();
+    restoreSettingsFocus();
   }
 
   $("start").addEventListener("click", start);
@@ -377,6 +386,11 @@
   $("settings-form").addEventListener("submit", event => {
     event.preventDefault();
     applyConfig(readSettingsForm());
+    closeSettings();
+  });
+
+  $("settings-dialog").addEventListener("cancel", event => {
+    event.preventDefault();
     closeSettings();
   });
 
