@@ -41,6 +41,12 @@ body {
   text-transform: uppercase;
 }
 
+.plan-name {
+  margin-top: .35rem;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
 h1 {
   margin: .55rem 0 .25rem;
   font-family: "Libre Baskerville", Georgia, serif;
@@ -103,10 +109,22 @@ button {
 
 button:hover { background: #32283a; }
 
-button:focus-visible {
+button:focus-visible,
+input:focus-visible {
   outline: 2px solid var(--accent-strong);
   outline-offset: 3px;
 }
+
+button.primary {
+  border-color: transparent;
+  background: var(--accent);
+  color: #241d29;
+  font-weight: 700;
+}
+
+button.secondary { background: transparent; }
+
+button.danger { color: #f2c4c4; }
 
 .hint {
   color: var(--muted);
@@ -119,6 +137,160 @@ code {
   border-radius: 4px;
   background: rgba(255,255,255,.08);
 }
+
+.settings-dialog {
+  width: min(900px, 94vw);
+  max-height: 90vh;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: #211a25;
+  color: var(--text);
+  box-shadow: 0 30px 100px rgba(0,0,0,.55);
+}
+
+.settings-dialog::backdrop {
+  background: rgba(10, 7, 12, .72);
+  backdrop-filter: blur(3px);
+}
+
+.settings-card {
+  padding: 1.5rem;
+  overflow: auto;
+  max-height: 90vh;
+}
+
+.settings-header,
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.settings-header {
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.settings-header h2 {
+  margin: .25rem 0 0;
+  font-family: "Libre Baskerville", Georgia, serif;
+}
+
+.icon-button {
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+fieldset {
+  margin: 1.25rem 0 0;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+legend {
+  padding: 0 .45rem;
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.settings-help {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+label {
+  display: grid;
+  gap: .4rem;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: .65rem .7rem;
+  color: var(--text);
+  background: #17131a;
+  font: inherit;
+}
+
+.stage-list {
+  display: grid;
+  gap: .65rem;
+}
+
+.stage-editor {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 100px auto 2.2rem;
+  align-items: end;
+  gap: .6rem;
+}
+
+.stage-number {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--track);
+  color: var(--muted);
+  font-size: .8rem;
+  margin-bottom: .2rem;
+}
+
+.stage-writing {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  height: 2.35rem;
+  white-space: nowrap;
+}
+
+.stage-writing input,
+.check input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+}
+
+.add-stage {
+  margin-top: .8rem;
+  width: 100%;
+  border-style: dashed;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .8rem;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.settings-actions {
+  margin-top: 1.25rem;
+}
+
+.settings-spacer { flex: 1; }
 
 body.viewer,
 body.embed { background: transparent; }
@@ -142,6 +314,23 @@ body.viewer .time {
   font-size: clamp(5rem, 18vw, 11rem);
 }
 
+@media (max-width: 700px) {
+  .settings-grid,
+  .checkbox-grid { grid-template-columns: 1fr; }
+
+  .stage-editor {
+    grid-template-columns: auto minmax(0, 1fr) 90px 2.2rem;
+  }
+
+  .stage-writing {
+    grid-column: 2 / -1;
+    height: auto;
+  }
+}
+
 @media (max-width: 600px) {
   .timer-card { padding: 1.5rem; }
+  .settings-card { padding: 1rem; }
+  .settings-actions { flex-wrap: wrap; }
+  .settings-spacer { display: none; }
 }
