@@ -86,6 +86,7 @@ h2 { margin: 0; font-size: clamp(1.4rem, 3vw, 2rem); }
 .actions { display: flex; flex-wrap: wrap; gap: .65rem; margin: 1.25rem 0 2.5rem; }
 
 button {
+  min-height: 44px;
   border: 1px solid var(--theme-border);
   border-radius: 999px;
   padding: .7rem 1.05rem;
@@ -162,6 +163,7 @@ label { display: grid; gap: .4rem; color: var(--theme-muted); font-size: .85rem;
 
 input[type="text"], input[type="number"], input[type="date"] {
   width: 100%;
+  min-height: 44px;
   border: 1px solid var(--theme-border);
   border-radius: 9px;
   padding: .65rem .7rem;
