@@ -240,3 +240,24 @@ body.viewer .dashboard, body.embed .dashboard { grid-template-columns: 2fr repea
 
 body.viewer .site-footer,
 body.embed .site-footer { display: none; }
+
+
+/* Accessibility baseline */
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--theme-accent-strong);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
