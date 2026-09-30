@@ -40,9 +40,11 @@
           await navigator.clipboard.writeText(source);
           const original = button.textContent;
           button.textContent = "Copied!";
+          announce(button.dataset.url === "iframe-code" ? "Iframe code copied." : "URL copied.");
           setTimeout(() => { button.textContent = original; }, 1200);
         } catch {
           button.textContent = "Copy failed";
+          announce("Copy failed.");
           setTimeout(() => { button.textContent = button.dataset.url === "iframe-code" ? "Copy iframe" : "Copy"; }, 1500);
         }
       });
