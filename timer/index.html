@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Writing Stream Timer · TLC Storyworks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="timer-shell">
+    <section class="timer-card" aria-live="polite">
+      <div class="eyebrow" id="stream-name">Writing Stream</div>
+      <div class="plan-name" id="plan-name">Writing Session</div>
+      <h1 id="stage-name">Ready</h1>
+      <div class="time" id="time">00:00</div>
+
+      <div class="progress-wrap" id="writing-progress-wrap">
+        <div class="progress-label">
+          <span id="writing-progress-label">Writing progress</span>
+          <span id="writing-progress-percent">0%</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Writing progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-fill" id="writing-progress"></div>
+        </div>
+      </div>
+
+      <div class="progress-wrap stream-progress-wrap" id="stream-progress-wrap">
+        <div class="progress-label">
+          <span id="stream-progress-label">Stream progress</span>
+          <span id="stream-progress-percent">0%</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Stream progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-fill" id="stream-progress"></div>
+        </div>
+      </div>
+
+      <div class="meta">
+        <span id="block-count">0 / 0 writing blocks</span>
+        <span id="next-stage">Ready to start</span>
+      </div>
+    </section>
+
+    <section class="controls" aria-label="Timer controls">
+      <button id="start">Start</button>
+      <button id="pause">Pause</button>
+      <button id="restart">Restart</button>
+      <button id="skip">Skip</button>
+      <button id="reset">Reset</button>
+    </section>
+    <p class="hint">Use <code>?viewer</code> for OBS/Streamlabs or <code>?embed</code> for a clean embed.</p>
+  </main>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
