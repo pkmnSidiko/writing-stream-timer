@@ -81,6 +81,7 @@
     const dialog=document.createElement("dialog");
     dialog.className="theme-dialog";
     dialog.id="theme-dialog";
+    dialog.setAttribute("aria-labelledby","theme-dialog-title");
 
     // Build the dialog with DOM APIs rather than innerHTML so values loaded from
     // localStorage can never be reinterpreted as HTML.
@@ -96,6 +97,7 @@
     eyebrow.className="eyebrow";
     eyebrow.textContent="TLC Storyworks · Appearance";
     const heading=document.createElement("h2");
+    heading.id="theme-dialog-title";
     heading.textContent="Customize appearance";
     headerTitle.append(eyebrow,heading);
     const closeButton=document.createElement("button");
@@ -189,7 +191,12 @@
       originalTheme = null;
       dialog.close();
     }
-    button.addEventListener("click",()=>{ originalTheme = { ...theme }; populate(); dialog.showModal(); });
+    button.addEventListener("click",()=>{
+      originalTheme = { ...theme };
+      populate();
+      dialog.showModal();
+      requestAnimationFrame(() => closeButton.focus());
+    });
     $("theme-close").addEventListener("click",cancelChanges);
     $("theme-cancel").addEventListener("click",cancelChanges);
     document.querySelectorAll(".theme-preset").forEach(btn=>btn.addEventListener("click",()=>{
@@ -199,8 +206,24 @@
       theme[key]=event.target.value; theme.preset="custom"; apply(); updateContrast(); $("theme-"+key+"-value").textContent=event.target.value;
     }));
     $("theme-reset").addEventListener("click",()=>{theme={...(document.body.dataset.tool === "timer" ? TIMER_DEFAULT_THEME : DEFAULT_THEME)};apply();populate();});
-    $("theme-form").addEventListener("submit",event=>{event.preventDefault();save();originalTheme=null;dialog.close();});
-    dialog.addEventListener("click",event=>{if(event.target===dialog)cancelChanges();});
+    $("theme-form").addEventListener("submit",event=>{
+      event.preventDefault();
+      save();
+      originalTheme=null;
+      dialog.close();
+      button.focus();
+    });
+    dialog.addEventListener("cancel",event=>{
+      event.preventDefault();
+      cancelChanges();
+      button.focus();
+    });
+    dialog.addEventListener("click",event=>{
+      if(event.target===dialog){
+        cancelChanges();
+        button.focus();
+      }
+    });
   }
 
   apply();
