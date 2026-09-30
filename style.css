@@ -78,6 +78,10 @@ h3 {
   margin-top: 1rem;
 }
 
+.tools + .tools {
+  margin-top: 1.5rem;
+}
+
 .tool-card {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -126,6 +130,11 @@ h3 {
   color: var(--theme-muted);
 }
 
+.roadmap-link {
+  margin: 1rem 0 0;
+}
+
+.roadmap-link a,
 .tool-link {
   display: inline-block;
   margin-top: .75rem;
