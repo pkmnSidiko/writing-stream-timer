@@ -3,7 +3,7 @@
 
 const TIMER_CONFIG = {
   activePlan: "standard-session",
-  streamName: "Writing Session",
+  streamName: "TLC Storyworks",
 
   plans: {
     "standard-session": {
