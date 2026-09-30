@@ -43,9 +43,9 @@
   }
   function tick(now) {
     if(!state.running) return;
-    if(state.config.mode==="target") state.remaining=Math.max(0,(Date.parse(state.config.target)-Date.now())/1000);
+    if(state.config.mode==="target") state.remaining=(Date.parse(state.config.target)-Date.now())/1000;
     else { if(state.lastTick===null) state.lastTick=now; state.remaining-=(now-state.lastTick)/1000; state.lastTick=now; }
-    if(state.remaining<=0) { state.remaining=state.config.mode==="duration"?0:0; state.running=false; state.finished=true; state.lastTick=null; announce("Countdown finished."); }
+    if(state.remaining<=0) { state.running=false; state.finished=true; state.lastTick=null; announce("Countdown finished."); }
     render(); if(state.running) requestAnimationFrame(tick);
   }
   function start() {
