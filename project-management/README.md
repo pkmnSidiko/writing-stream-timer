@@ -1,43 +1,40 @@
-# Project Management
+# Project Tracker
 
-A future home for writing-project planning and organization tools.
+A small, local-first project dashboard for writers and storytellers.
 
-This directory is intentionally scaffolding-only for now. Individual tools can be added here when there is a concrete use case rather than exposing an empty widget on the public toolbox.
+## Current scope
 
-## What belongs here
+The MVP tracks multiple projects with:
 
-Project management tools should help writers plan and organize the work itself, such as:
+- project name and type
+- status
+- goal
+- optional deadline
+- current task
+- generic milestones
+- external links
+- notes
+- local-browser storage
+- JSON export/import for backup or moving data between browsers
 
-- project planning boards
-- milestone trackers
-- project dashboards
-- sprint planning
-- writing goals and deadlines
-- chapter or scene planning
-- project-level progress views
+It intentionally does **not** duplicate the Word Tracker. Word count history remains the responsibility of `word-tracker/`.
 
-These are distinct from:
+## Storage
 
-- `timer/` — writing sessions and time
-- `countdown/` — standalone deadlines and events
-- `word-tracker/` — manuscript/session progress
-- future `prompt-deck/` — creative generation
-- future `crawl/` — writing-game experiences
-- future `excerpt/` — book/page-style presentation
+Project data stays in the browser's local storage. Nothing is sent to a server.
 
-## Shared standards
+Because local storage is browser/device-specific, use **Export projects** for backup or transfer.
 
-When tools are added here, they should use the repository's shared appearance system and accessibility foundation:
+## Viewer mode
 
-- `../theme.css`
-- `../theme.js`
-- `../embed.js`
-- `../links.css`
+Viewer mode is not enabled yet. Project state is local to the browser, so a URL alone cannot safely identify a project for another display device without a future sharing/sync design.
 
-Viewer links should follow [VIEWER_LINKS.md](../VIEWER_LINKS.md). In particular, use the shared viewer-link helper rather than serializing project data, configuration, or custom settings into URLs.
+## Future possibilities
 
-Project data should remain local to the browser unless a future tool explicitly establishes another storage model.
+- optional integration with Word Tracker
+- project-level progress summaries
+- chapter/scene trackers
+- challenge/deadline connections
+- display/viewer mode once a sharing model exists
 
-## Status
-
-Scaffolding only. No project-management tool is currently linked from the public toolbox.
+This tool remains deliberately smaller than a general-purpose project-management suite.
