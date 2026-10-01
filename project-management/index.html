@@ -3,33 +3,123 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Project management tools from TLC Storyworks.">
-  <title>Project Management · TLC Storyworks</title>
+  <meta name="description" content="A simple local-first project tracker for writers and storytellers.">
+  <title>Project Tracker · TLC Storyworks</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="../theme.css">
   <link rel="stylesheet" href="../links.css">
 </head>
 <body>
-  <main class="project-shell">
-    <a class="back-link" href="../">← Writing Tools</a>
+  <a class="back-link" href="../">← Writing Tools</a>
 
-    <header>
-      <p class="eyebrow">TLC Storyworks · Project Management</p>
-      <h1>Project Management</h1>
-      <p class="lede">
-        A future home for tools that help writers plan and organize the work itself.
-      </p>
+  <main class="project-shell" id="top">
+    <header class="project-header">
+      <p class="eyebrow">TLC Storyworks · Writing Tools</p>
+      <h1>Project Tracker</h1>
+      <p class="lede">Keep the shape of a writing project in one place: what it is, where it stands, what comes next, and what still needs doing.</p>
     </header>
 
-    <section class="placeholder" aria-labelledby="status-heading">
-      <h2 id="status-heading">Still brewing</h2>
-      <p>
-        This area is intentionally scaffolded but not yet a public toolbox tool.
-        Project planning, milestones, dashboards, and related utilities will live here
-        as they become useful enough to build.
-      </p>
-      <p><a href="../roadmap/">See the roadmap →</a></p>
-    </section>
+    <div class="app-layout">
+      <aside class="project-list-panel" aria-labelledby="projects-heading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Your projects</p>
+            <h2 id="projects-heading">Projects</h2>
+          </div>
+          <button id="new-project" class="primary small" type="button">+ New</button>
+        </div>
+        <label class="search-field">Find a project<input id="project-search" type="search" placeholder="Search projects" autocomplete="off"></label>
+        <div id="project-list" class="project-list" role="list"></div>
+        <div id="project-list-empty" class="empty-state" hidden>No projects yet. Start with a project you are currently working on.</div>
+      </aside>
+
+      <section class="project-main" aria-labelledby="project-heading">
+        <div id="empty-view" class="empty-view">
+          <h2>Start a project</h2>
+          <p>Create a project to keep its goals, milestones, next task, links, and notes together.</p>
+          <button id="empty-new-project" class="primary" type="button">Create a project</button>
+        </div>
+
+        <div id="project-view" hidden>
+          <div class="project-title-row">
+            <div>
+              <p id="project-type-label" class="eyebrow"></p>
+              <h2 id="project-heading"></h2>
+              <p id="project-description" class="project-description"></p>
+            </div>
+            <div class="title-actions">
+              <button id="edit-project" type="button">Edit project</button>
+              <button id="delete-project" class="danger-outline" type="button">Delete</button>
+            </div>
+          </div>
+
+          <div class="overview-grid" aria-label="Project overview">
+            <div class="info-card">
+              <span class="info-label">Status</span>
+              <strong id="project-status"></strong>
+            </div>
+            <div class="info-card">
+              <span class="info-label">Goal</span>
+              <strong id="project-goal"></strong>
+            </div>
+            <div class="info-card">
+              <span class="info-label">Deadline</span>
+              <strong id="project-deadline"></strong>
+            </div>
+            <div class="info-card">
+              <span class="info-label">Milestones</span>
+              <strong id="project-milestones"></strong>
+            </div>
+          </div>
+
+          <section class="tracker-section next-task-section" aria-labelledby="next-task-heading">
+            <div class="section-heading">
+              <div><p class="eyebrow">Right now</p><h3 id="next-task-heading">Current task</h3></div>
+            </div>
+            <p id="current-task" class="current-task"></p>
+          </section>
+
+          <section class="tracker-section" aria-labelledby="milestones-heading">
+            <div class="section-heading">
+              <div><p class="eyebrow">Progress</p><h3 id="milestones-heading">Milestones</h3></div>
+              <button id="add-milestone" class="small" type="button">+ Add milestone</button>
+            </div>
+            <div id="milestone-list" class="milestone-list"></div>
+          </section>
+
+          <div class="two-column">
+            <section class="tracker-section" aria-labelledby="links-heading">
+              <div class="section-heading">
+                <div><p class="eyebrow">References</p><h3 id="links-heading">Links</h3></div>
+                <button id="add-link" class="small" type="button">+ Add link</button>
+              </div>
+              <div id="project-links" class="link-list"></div>
+            </section>
+
+            <section class="tracker-section" aria-labelledby="notes-heading">
+              <div class="section-heading">
+                <div><p class="eyebrow">Scratch space</p><h3 id="notes-heading">Notes</h3></div>
+              </div>
+              <p id="project-notes" class="notes"></p>
+            </section>
+          </div>
+
+          <p id="project-updated" class="updated-label"></p>
+        </div>
+      </section>
+    </div>
+
+    <details class="data-tools">
+      <summary>Project data</summary>
+      <div class="data-tools-content">
+        <p>Your projects are stored only in this browser. Export a backup if you want to move them to another browser or device.</p>
+        <div class="button-row">
+          <button id="export-projects" type="button">Export projects</button>
+          <button id="import-projects" type="button">Import projects</button>
+          <input id="import-file" type="file" accept="application/json,.json" hidden>
+        </div>
+      </div>
+    </details>
   </main>
 
   <footer class="site-footer">
@@ -41,9 +131,82 @@
     </nav>
   </footer>
 
-  <script src="../theme.js"></script>
+  <dialog id="project-dialog" class="settings-dialog" aria-labelledby="dialog-title">
+    <form method="dialog" id="project-form" class="settings-card">
+      <div class="settings-header">
+        <div><div class="eyebrow">Project Tracker</div><h2 id="dialog-title">New project</h2></div>
+        <button type="button" id="close-dialog" class="icon-button" aria-label="Close">×</button>
+      </div>
+
+      <div class="settings-grid">
+        <label>Project name<input id="field-name" type="text" maxlength="120" required></label>
+        <label>Type
+          <select id="field-type">
+            <option>Novel</option>
+            <option>Short story</option>
+            <option>Fanfiction</option>
+            <option>Poetry</option>
+            <option>Nonfiction</option>
+            <option>RPG / worldbuilding</option>
+            <option>Zine / collection</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>Status
+          <select id="field-status">
+            <option>Idea</option>
+            <option>Planning</option>
+            <option>Drafting</option>
+            <option>Revising</option>
+            <option>Editing</option>
+            <option>On hold</option>
+            <option>Complete</option>
+          </select>
+        </label>
+        <label>Goal (optional)<input id="field-goal" type="text" maxlength="120" placeholder="50,000 words, first draft, submission, etc."></label>
+        <label>Deadline (optional)<input id="field-deadline" type="date"></label>
+        <label class="full-field">Current task<input id="field-task" type="text" maxlength="240" placeholder="What are you working on next?"></label>
+      </div>
+
+      <label class="full-field">Description (optional)<textarea id="field-description" rows="3" maxlength="500" placeholder="A short description of the project."></textarea></label>
+
+      <div class="dialog-section">
+        <div class="section-heading"><h3>Milestones</h3><button id="form-add-milestone" class="small" type="button">+ Add</button></div>
+        <div id="form-milestones" class="editor-list"></div>
+      </div>
+
+      <div class="dialog-section">
+        <div class="section-heading"><h3>Links</h3><button id="form-add-link" class="small" type="button">+ Add</button></div>
+        <div id="form-links" class="editor-list"></div>
+      </div>
+
+      <label class="full-field">Notes (optional)<textarea id="field-notes" rows="5" maxlength="5000" placeholder="Anything you want to keep with this project."></textarea></label>
+
+      <p id="dialog-error" class="dialog-error" role="alert" hidden></p>
+      <div class="settings-actions">
+        <span class="settings-spacer"></span>
+        <button type="button" id="cancel-dialog">Cancel</button>
+        <button type="submit" class="primary">Save project</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="simple-dialog" class="settings-dialog" aria-labelledby="simple-title">
+    <form method="dialog" id="simple-form" class="settings-card">
+      <div class="settings-header">
+        <div><div class="eyebrow">Project Tracker</div><h2 id="simple-title"></h2></div>
+        <button type="button" id="close-simple" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <label id="simple-label"></label>
+      <div class="settings-actions"><span class="settings-spacer"></span><button type="button" id="cancel-simple">Cancel</button><button type="submit" class="primary">Save</button></div>
+    </form>
+  </dialog>
+
+  <div id="tracker-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+
   <script src="../embed.js"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
+  <script src="../theme.js"></script>
 </body>
 </html>
