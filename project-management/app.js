@@ -1,244 +1,58 @@
-(() => {
-  "use strict";
+(()=>{"use strict";
+const STORAGE_KEY="tlc-storyworks-projects",SELECTED_KEY="tlc-storyworks-project-selected",$=id=>document.getElementById(id);
+let projects=loadProjects(),selectedId=localStorage.getItem(SELECTED_KEY)||null,editingId=null,editingChapterId=null,editingScene=null,simpleType=null;
+const uid=p=>p+"-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8),now=()=>new Date().toISOString(),today=()=>new Date().toISOString().slice(0,10);
+function blankProject(){const stamp=now();return{id:uid("project"),name:"",type:"Novel",status:"Idea",description:"",goal:"",deadline:"",currentTask:"",milestones:[],chapters:[],links:[],notes:"",log:[],createdAt:stamp,updatedAt:stamp}}
+function cleanScene(s){return{id:typeof s?.id==="string"?s.id:uid("scene"),title:typeof s?.title==="string"?s.title:"Untitled scene",status:typeof s?.status==="string"?s.status:"Planned",goal:typeof s?.goal==="string"?s.goal:"",notes:typeof s?.notes==="string"?s.notes:""}}
+function cleanChapter(c){return{id:typeof c?.id==="string"?c.id:uid("chapter"),title:typeof c?.title==="string"?c.title:"Untitled chapter",status:typeof c?.status==="string"?c.status:"Planned",notes:typeof c?.notes==="string"?c.notes:"",scenes:Array.isArray(c?.scenes)?c.scenes.map(cleanScene):[]}}
+function cleanLog(e){return{id:typeof e?.id==="string"?e.id:uid("log"),date:typeof e?.date==="string"?e.date:today(),activity:typeof e?.activity==="string"?e.activity:"Writing",words:Math.max(0,Number(e?.words)||0),minutes:Math.max(0,Number(e?.minutes)||0),chapterId:typeof e?.chapterId==="string"?e.chapterId:"",sceneId:typeof e?.sceneId==="string"?e.sceneId:"",note:typeof e?.note==="string"?e.note:""}}
+function cleanProject(p){const b=blankProject();return{...b,...p,id:typeof p?.id==="string"?p.id:b.id,milestones:Array.isArray(p?.milestones)?p.milestones.filter(m=>m&&typeof m.title==="string").map(m=>({id:m.id||uid("milestone"),title:m.title,done:Boolean(m.done)})):[],chapters:Array.isArray(p?.chapters)?p.chapters.map(cleanChapter):[],links:Array.isArray(p?.links)?p.links.filter(l=>l&&typeof l.url==="string").map(l=>({id:l.id||uid("link"),label:typeof l.label==="string"?l.label:l.url,url:l.url})):[],log:Array.isArray(p?.log)?p.log.map(cleanLog):[]}}
+function loadProjects(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d)?d.map(cleanProject):[]}catch{return[]}}
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(projects))}
+function announce(m){$("tracker-status").textContent="";requestAnimationFrame(()=>{$("tracker-status").textContent=m})}
+function selectedProject(){return projects.find(p=>p.id===selectedId)||null}
+function formatDate(v){if(!v)return"No deadline";const d=new Date(v+"T00:00:00");return Number.isNaN(d.getTime())?v:new Intl.DateTimeFormat(undefined,{dateStyle:"medium"}).format(d)}
+function formatUpdated(v){const d=new Date(v);return Number.isNaN(d.getTime())?"":"Updated "+new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(d)}
+function formatLogDate(v){const d=new Date(v+"T00:00:00");return Number.isNaN(d.getTime())?v:new Intl.DateTimeFormat(undefined,{dateStyle:"medium"}).format(d)}
+function progress(p){const vals=[];if(p.milestones.length)vals.push(p.milestones.filter(x=>x.done).length/p.milestones.length);const scenes=p.chapters.flatMap(c=>c.scenes);if(scenes.length)vals.push(scenes.filter(s=>s.status==="Complete").length/scenes.length);else if(p.chapters.length)vals.push(p.chapters.filter(c=>c.status==="Complete").length/p.chapters.length);return vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*100)+"%":"—"}
+function renderList(){const list=$("project-list"),q=$("project-search").value.trim().toLowerCase();list.replaceChildren();const matches=projects.filter(p=>!q||[p.name,p.type,p.status,p.description,p.goal].join(" ").toLowerCase().includes(q));$("project-list-empty").hidden=matches.length>0;matches.forEach(p=>{const b=document.createElement("button");b.type="button";b.className=p.id===selectedId?"selected":"";b.setAttribute("role","listitem");const t=document.createElement("span");t.className="project-list-title";t.textContent=p.name||"Untitled project";const m=document.createElement("span");m.className="project-list-meta";m.textContent=p.status+(p.deadline?" · "+formatDate(p.deadline):"");b.append(t,m);b.addEventListener("click",()=>{selectedId=p.id;localStorage.setItem(SELECTED_KEY,p.id);render()});list.appendChild(b)})}
+function renderMilestones(p){const list=$("milestone-list");list.replaceChildren();if(!p.milestones.length){const e=document.createElement("p");e.className="empty-state";e.textContent="No milestones yet.";list.appendChild(e);return}p.milestones.forEach(m=>{const r=document.createElement("div");r.className="milestone"+(m.done?" done":"");const c=document.createElement("input");c.type="checkbox";c.checked=m.done;c.setAttribute("aria-label","Mark milestone complete: "+m.title);c.addEventListener("change",()=>{m.done=c.checked;p.updatedAt=now();save();render();announce(m.done?"Milestone completed.":"Milestone marked incomplete.")});const t=document.createElement("span");t.textContent=m.title;const x=document.createElement("button");x.type="button";x.className="icon-button small-icon";x.textContent="×";x.setAttribute("aria-label","Remove milestone: "+m.title);x.addEventListener("click",()=>{p.milestones=p.milestones.filter(z=>z.id!==m.id);p.updatedAt=now();save();render();announce("Milestone removed.")});r.append(c,t,x);list.appendChild(r)})}
+function renderLinks(p){const list=$("project-links");list.replaceChildren();if(!p.links.length){const e=document.createElement("p");e.className="empty-state";e.textContent="No links yet.";list.appendChild(e);return}p.links.forEach(l=>{const r=document.createElement("div");r.className="link-item";const a=document.createElement("a");a.href=l.url;a.target="_blank";a.rel="noopener noreferrer";a.textContent=l.label||l.url;const x=document.createElement("button");x.type="button";x.className="icon-button small-icon";x.textContent="×";x.setAttribute("aria-label","Remove link: "+(l.label||l.url));x.addEventListener("click",()=>{p.links=p.links.filter(z=>z.id!==l.id);p.updatedAt=now();save();render();announce("Link removed.")});r.append(a,x);list.appendChild(r)})}
+function renderChapters(p){const list=$("chapter-list");list.replaceChildren();if(!p.chapters.length){const e=document.createElement("div");e.className="empty-state";e.textContent="No chapters yet. You can also use this section for acts, sections, or other structure.";list.appendChild(e);return}p.chapters.forEach(c=>{const card=document.createElement("article");card.className="chapter-card";const h=document.createElement("div");h.className="chapter-header";const tw=document.createElement("div"),title=document.createElement("h4");title.textContent=c.title;const meta=document.createElement("p");meta.className="chapter-meta";meta.textContent=c.status+" · "+c.scenes.length+" "+(c.scenes.length===1?"scene":"scenes");tw.append(title,meta);const acts=document.createElement("div");acts.className="button-row";const edit=document.createElement("button");edit.type="button";edit.className="small";edit.textContent="Edit";edit.addEventListener("click",()=>openChapterEditor(c));const add=document.createElement("button");add.type="button";add.className="small";add.textContent="+ Scene";add.addEventListener("click",()=>openSceneEditor(c.id,null));const del=document.createElement("button");del.type="button";del.className="small danger-outline";del.textContent="Delete";del.addEventListener("click",()=>{if(confirm("Delete “"+c.title+"” and its scenes?")){p.chapters=p.chapters.filter(x=>x.id!==c.id);p.log.forEach(e=>{if(e.chapterId===c.id){e.chapterId="";e.sceneId=""}});p.updatedAt=now();save();render();announce("Chapter deleted.")}});acts.append(edit,add,del);h.append(tw,acts);card.appendChild(h);if(c.notes){const n=document.createElement("p");n.className="chapter-notes";n.textContent=c.notes;card.appendChild(n)}const sl=document.createElement("div");sl.className="scene-list";if(!c.scenes.length){const e=document.createElement("p");e.className="empty-state";e.textContent="No scenes yet.";sl.appendChild(e)}c.scenes.forEach(s=>{const r=document.createElement("div");r.className="scene-row"+(s.status==="Complete"?" done":"");const body=document.createElement("div"),st=document.createElement("strong");st.textContent=s.title;const ss=document.createElement("span");ss.className="scene-status";ss.textContent=s.status;body.append(st,ss);if(s.goal){const g=document.createElement("p");g.className="scene-goal";g.textContent=s.goal;body.appendChild(g)}const a=document.createElement("div");a.className="button-row";const ed=document.createElement("button");ed.type="button";ed.className="small";ed.textContent="Edit";ed.addEventListener("click",()=>openSceneEditor(c.id,s.id));const rm=document.createElement("button");rm.type="button";rm.className="small danger-outline";rm.textContent="Delete";rm.addEventListener("click",()=>{if(confirm("Delete “"+s.title+"”?")){c.scenes=c.scenes.filter(x=>x.id!==s.id);p.log.forEach(e=>{if(e.sceneId===s.id)e.sceneId=""});p.updatedAt=now();save();render();announce("Scene deleted.")}});a.append(ed,rm);r.append(body,a);sl.appendChild(r)});card.appendChild(sl);list.appendChild(card)})}
+function renderLog(p){const summary=$("log-summary");summary.replaceChildren();const words=p.log.reduce((n,e)=>n+e.words,0),minutes=p.log.reduce((n,e)=>n+e.minutes,0),days=new Set(p.log.map(e=>e.date)).size;[["Sessions",p.log.length],["Logged words",words.toLocaleString()],["Logged minutes",minutes.toLocaleString()],["Days logged",days]].forEach(([l,v])=>{const c=document.createElement("div");c.className="log-stat";const a=document.createElement("span");a.className="info-label";a.textContent=l;const b=document.createElement("strong");b.textContent=v;c.append(a,b);summary.appendChild(c)});const list=$("writing-log");list.replaceChildren();if(!p.log.length){const e=document.createElement("div");e.className="empty-state";e.textContent="No writing sessions logged yet.";list.appendChild(e);return}[...p.log].sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id)).forEach(e=>{const r=document.createElement("article");r.className="log-entry";const d=document.createElement("time");d.dateTime=e.date;d.textContent=formatLogDate(e.date);const main=document.createElement("div"),title=document.createElement("strong");title.textContent=e.activity;const bits=[];if(e.words)bits.push(e.words.toLocaleString()+" words");if(e.minutes)bits.push(e.minutes+" min");const c=p.chapters.find(x=>x.id===e.chapterId),s=c?.scenes.find(x=>x.id===e.sceneId);if(c)bits.push(c.title);if(s)bits.push(s.title);const meta=document.createElement("p");meta.className="log-meta";meta.textContent=bits.join(" · ")||"No quantities logged";main.append(title,meta);if(e.note){const n=document.createElement("p");n.className="log-note";n.textContent=e.note;main.appendChild(n)}const x=document.createElement("button");x.type="button";x.className="small danger-outline";x.textContent="Delete";x.addEventListener("click",()=>{if(confirm("Delete this writing-log entry?")){p.log=p.log.filter(z=>z.id!==e.id);p.updatedAt=now();save();render();announce("Writing-log entry deleted.")}});r.append(d,main,x);list.appendChild(r)})}
+function renderProject(){const p=selectedProject();$("empty-view").hidden=!!p;$("project-view").hidden=!p;if(!p)return;$("project-type-label").textContent=p.type;$("project-heading").textContent=p.name;$("project-description").textContent=p.description;$("project-description").hidden=!p.description;$("project-status").textContent=p.status;$("project-goal").textContent=p.goal||"No goal set";$("project-deadline").textContent=formatDate(p.deadline);$("project-progress").textContent=progress(p);$("current-task").textContent=p.currentTask||"No current task set. Edit the project when you know what comes next.";$("project-notes").textContent=p.notes||"No notes yet.";$("project-updated").textContent=formatUpdated(p.updatedAt);renderMilestones(p);renderLinks(p);renderChapters(p);renderLog(p)}
+function render(){renderList();renderProject()}
+function setTab(n){document.querySelectorAll(".tab-button").forEach(b=>b.classList.toggle("selected",b.dataset.tab===n));document.querySelectorAll(".tab-panel").forEach(p=>p.hidden=p.id!=="tab-"+n)}
+function openEditor(p){editingId=p?.id||null;const x=p?cleanProject(p):blankProject();$("dialog-title").textContent=p?"Edit project":"New project";$("field-name").value=x.name;$("field-type").value=x.type;$("field-status").value=x.status;$("field-goal").value=x.goal;$("field-deadline").value=x.deadline;$("field-task").value=x.currentTask;$("field-description").value=x.description;$("field-notes").value=x.notes;const box=$("form-milestones");box.replaceChildren();x.milestones.forEach(m=>addMilestoneEditor(box,m));$("dialog-error").hidden=true;$("project-dialog").showModal();requestAnimationFrame(()=>$("field-name").focus())}
+function addMilestoneEditor(box,v={id:uid("milestone"),title:"",done:false}){const r=document.createElement("div");r.className="editor-row";r.dataset.id=v.id;const i=document.createElement("input");i.type="text";i.maxLength=180;i.value=v.title;i.placeholder="Milestone";const x=document.createElement("button");x.type="button";x.className="icon-button small-icon";x.textContent="×";x.setAttribute("aria-label","Remove milestone field");x.addEventListener("click",()=>r.remove());r.append(i,x);box.appendChild(r)}
+function readProjectForm(){const name=$("field-name").value.trim();if(!name)throw Error("A project name is required.");const ms=[...$("form-milestones").querySelectorAll(".editor-row")].map(r=>({id:r.dataset.id||uid("milestone"),title:r.querySelector("input").value.trim(),done:false})).filter(m=>m.title);const old=editingId?selectedProject():null;if(old){const map=new Map(old.milestones.map(m=>[m.id,m]));ms.forEach(m=>{if(map.has(m.id))m.done=map.get(m.id).done})}return{id:old?.id||uid("project"),name,type:$("field-type").value,status:$("field-status").value,goal:$("field-goal").value.trim(),deadline:$("field-deadline").value,currentTask:$("field-task").value.trim(),description:$("field-description").value.trim(),milestones:ms,chapters:old?.chapters||[],links:old?.links||[],notes:$("field-notes").value.trim(),log:old?.log||[],createdAt:old?.createdAt||now(),updatedAt:now()}}
+function closeProject(){ $("project-dialog").close();editingId=null}
+function openSimple(t){simpleType=t;$("simple-title").textContent=t==="milestone"?"Add milestone":"Add link";const l=$("simple-label");l.replaceChildren();if(t==="milestone"){l.append("Milestone title");const i=document.createElement("input");i.id="simple-value";i.type="text";i.maxLength=180;i.required=true;l.appendChild(i)}else{l.append("Link label");const w=document.createElement("div");w.className="settings-grid";const i=document.createElement("input");i.id="simple-label-value";i.type="text";i.maxLength=100;i.placeholder="Label";const u=document.createElement("input");u.id="simple-value";u.type="url";u.maxLength=500;u.placeholder="https://...";u.required=true;w.append(i,u);l.appendChild(w)}$("simple-dialog").showModal();requestAnimationFrame(()=>$(t==="milestone"?"simple-value":"simple-label-value").focus())}
+function openChapterEditor(c){editingChapterId=c?.id||null;const x=c||{title:"",status:"Planned",notes:"",scenes:[]};$("chapter-title").textContent=c?"Edit chapter":"Add chapter";$("chapter-name").value=x.title;$("chapter-status").value=x.status;$("chapter-notes").value=x.notes;const box=$("chapter-scenes-editor");box.replaceChildren();x.scenes.forEach(s=>addSceneEditor(box,s));$("chapter-error").hidden=true;$("chapter-dialog").showModal();requestAnimationFrame(()=>$("chapter-name").focus())}
+function addSceneEditor(box,v={id:uid("scene"),title:"",status:"Planned",goal:"",notes:""}){const r=document.createElement("div");r.className="scene-editor-row";r.dataset.id=v.id;const t=document.createElement("input");t.type="text";t.maxLength=160;t.value=v.title;t.placeholder="Scene title";t.setAttribute("aria-label","Scene title");const s=document.createElement("select");["Planned","Drafting","Revising","Complete","On hold"].forEach(x=>{const o=new Option(x,x);o.selected=x===v.status;s.append(o)});s.setAttribute("aria-label","Scene status");const g=document.createElement("input");g.type="text";g.maxLength=240;g.value=v.goal;g.placeholder="Scene goal (optional)";g.setAttribute("aria-label","Scene goal");const x=document.createElement("button");x.type="button";x.className="icon-button small-icon";x.textContent="×";x.setAttribute("aria-label","Remove scene field");x.addEventListener("click",()=>r.remove());r.append(t,s,g,x);box.appendChild(r)}
+function readChapterForm(){const p=selectedProject(),title=$("chapter-name").value.trim();if(!title)throw Error("A chapter title is required.");const old=editingChapterId?p.chapters.find(c=>c.id===editingChapterId):null;const scenes=[...$("chapter-scenes-editor").querySelectorAll(".scene-editor-row")].map(r=>({id:r.dataset.id||uid("scene"),title:r.children[0].value.trim(),status:r.children[1].value,goal:r.children[2].value.trim(),notes:old?.scenes.find(s=>s.id===r.dataset.id)?.notes||""})).filter(s=>s.title);return{id:old?.id||uid("chapter"),title,status:$("chapter-status").value,notes:$("chapter-notes").value.trim(),scenes}}
+function closeChapter(){$("chapter-dialog").close();editingChapterId=null}
+function openSceneEditor(chapterId,sceneId){const p=selectedProject(),c=p?.chapters.find(x=>x.id===chapterId),s=c?.scenes.find(x=>x.id===sceneId);editingScene={chapterId,sceneId:s?.id||null};$("scene-title").textContent=s?"Edit scene":"Add scene";$("scene-name").value=s?.title||"";$("scene-status").value=s?.status||"Planned";$("scene-goal").value=s?.goal||"";$("scene-notes").value=s?.notes||"";$("scene-error").hidden=true;$("scene-dialog").showModal();requestAnimationFrame(()=>$("scene-name").focus())}
+function closeScene(){$("scene-dialog").close();editingScene=null}
+function populateLogOptions(){const p=selectedProject(),cs=$("log-chapter"),ss=$("log-scene"),oldC=cs.value,oldS=ss.value;cs.replaceChildren(new Option("No chapter",""));p.chapters.forEach(c=>cs.add(new Option(c.title,c.id)));cs.value=p.chapters.some(c=>c.id===oldC)?oldC:"";ss.replaceChildren(new Option("No scene",""));const c=p.chapters.find(x=>x.id===cs.value);(c?.scenes||[]).forEach(s=>ss.add(new Option(s.title,s.id)));ss.value=c?.scenes.some(s=>s.id===oldS)?oldS:""}
+function openLog(){ $("log-date").value=today();$("log-activity").value="Writing";$("log-words").value="";$("log-minutes").value="";$("log-note").value="";populateLogOptions();$("log-dialog").showModal();requestAnimationFrame(()=>$("log-date").focus())}
 
-  const STORAGE_KEY = "tlc-storyworks-projects";
-  const SELECTED_KEY = "tlc-storyworks-project-selected";
-  const $ = id => document.getElementById(id);
-  let projects = loadProjects();
-  let selectedId = localStorage.getItem(SELECTED_KEY) || null;
-  let editingId = null;
+$("new-project").onclick=()=>openEditor(null);$("empty-new-project").onclick=()=>openEditor(null);$("edit-project").onclick=()=>{const p=selectedProject();if(p)openEditor(p)};
+$("delete-project").onclick=()=>{const p=selectedProject();if(p&&confirm("Delete “"+p.name+"”? This cannot be undone.")){projects=projects.filter(x=>x.id!==p.id);selectedId=projects[0]?.id||null;save();if(selectedId)localStorage.setItem(SELECTED_KEY,selectedId);else localStorage.removeItem(SELECTED_KEY);render();announce("Project deleted.")}};
+$("add-milestone").onclick=()=>openSimple("milestone");$("add-link").onclick=()=>openSimple("link");$("form-add-milestone").onclick=()=>addMilestoneEditor($("form-milestones"));$("project-search").oninput=renderList;$("add-chapter").onclick=()=>openChapterEditor(null);$("chapter-add-scene").onclick=()=>addSceneEditor($("chapter-scenes-editor"));$("add-log-entry").onclick=openLog;$("log-chapter").onchange=populateLogOptions;document.querySelectorAll(".tab-button").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 
-  function uid(prefix) {
-    return prefix + "-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
-  }
-  function now() { return new Date().toISOString(); }
-  function blankProject() {
-    const stamp = now();
-    return { id: uid("project"), name:"", type:"Novel", status:"Idea", description:"", goal:"", deadline:"", currentTask:"",
-      milestones:[], links:[], notes:"", createdAt:stamp, updatedAt:stamp };
-  }
-  function cleanProject(p) {
-    const base = blankProject();
-    return {
-      ...base, ...p,
-      id: typeof p?.id === "string" ? p.id : base.id,
-      milestones: Array.isArray(p?.milestones) ? p.milestones.filter(m => m && typeof m.title === "string").map(m => ({id:m.id || uid("milestone"), title:m.title, done:Boolean(m.done)})) : [],
-      links: Array.isArray(p?.links) ? p.links.filter(l => l && typeof l.url === "string").map(l => ({id:l.id || uid("link"), label:typeof l.label==="string" ? l.label : l.url, url:l.url})) : []
-    };
-  }
-  function loadProjects() {
-    try {
-      const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      return Array.isArray(data) ? data.map(cleanProject) : [];
-    } catch { return []; }
-  }
-  function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(projects)); }
-  function announce(message) { $("tracker-status").textContent = message; }
-  function selectedProject() { return projects.find(p => p.id === selectedId) || null; }
-  function selectProject(id) {
-    selectedId = id;
-    if (id) localStorage.setItem(SELECTED_KEY, id); else localStorage.removeItem(SELECTED_KEY);
-    render();
-  }
-  function escapeText(value) { return String(value ?? ""); }
-  function formatDate(value) {
-    if (!value) return "No deadline";
-    const d = new Date(value + "T00:00:00");
-    return Number.isNaN(d.getTime()) ? value : new Intl.DateTimeFormat(undefined,{dateStyle:"medium"}).format(d);
-  }
-  function formatUpdated(value) {
-    const d = new Date(value);
-    return Number.isNaN(d.getTime()) ? "" : "Updated " + new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(d);
-  }
+$("project-form").onsubmit=e=>{e.preventDefault();try{const p=readProjectForm(),i=projects.findIndex(x=>x.id===p.id);if(i>=0)projects[i]=p;else projects.unshift(p);selectedId=p.id;localStorage.setItem(SELECTED_KEY,p.id);save();closeProject();render();announce(i>=0?"Project updated.":"Project created.")}catch(err){$("dialog-error").textContent=err.message;$("dialog-error").hidden=false}};
+$("close-dialog").onclick=closeProject;$("cancel-dialog").onclick=closeProject;$("project-dialog").oncancel=e=>{e.preventDefault();closeProject()};
+$("simple-form").onsubmit=e=>{e.preventDefault();const p=selectedProject();if(!p)return;if(simpleType==="milestone"){const v=$("simple-value").value.trim();if(!v)return;p.milestones.push({id:uid("milestone"),title:v,done:false});announce("Milestone added.")}else{const u=$("simple-value").value.trim(),l=$("simple-label-value").value.trim();try{new URL(u)}catch{$("simple-value").setCustomValidity("Enter a complete URL.");$("simple-value").reportValidity();return}p.links.push({id:uid("link"),label:l||u,url:u});announce("Link added.")}p.updatedAt=now();save();$("simple-dialog").close();render()};
+$("close-simple").onclick=()=>$("simple-dialog").close();$("cancel-simple").onclick=()=>$("simple-dialog").close();$("simple-dialog").oncancel=e=>{e.preventDefault();$("simple-dialog").close()};
+$("chapter-form").onsubmit=e=>{e.preventDefault();try{const p=selectedProject(),c=readChapterForm(),i=p.chapters.findIndex(x=>x.id===c.id);if(i>=0)p.chapters[i]=c;else p.chapters.push(c);p.updatedAt=now();save();closeChapter();render();announce(i>=0?"Chapter updated.":"Chapter added.")}catch(err){$("chapter-error").textContent=err.message;$("chapter-error").hidden=false}};
+$("close-chapter").onclick=closeChapter;$("cancel-chapter").onclick=closeChapter;$("chapter-dialog").oncancel=e=>{e.preventDefault();closeChapter()};
+$("scene-form").onsubmit=e=>{e.preventDefault();try{const p=selectedProject(),c=p.chapters.find(x=>x.id===editingScene.chapterId),title=$("scene-name").value.trim();if(!c)throw Error("The selected chapter no longer exists.");if(!title)throw Error("A scene title is required.");const v={id:editingScene.sceneId||uid("scene"),title,status:$("scene-status").value,goal:$("scene-goal").value.trim(),notes:$("scene-notes").value.trim()},i=c.scenes.findIndex(s=>s.id===v.id);if(i>=0)c.scenes[i]=v;else c.scenes.push(v);p.updatedAt=now();save();closeScene();render();announce(i>=0?"Scene updated.":"Scene added.")}catch(err){$("scene-error").textContent=err.message;$("scene-error").hidden=false}};
+$("close-scene").onclick=closeScene;$("cancel-scene").onclick=closeScene;$("scene-dialog").oncancel=e=>{e.preventDefault();closeScene()};
+$("log-form").onsubmit=e=>{e.preventDefault();const p=selectedProject();p.log.push({id:uid("log"),date:$("log-date").value||today(),activity:$("log-activity").value,words:Math.max(0,Number($("log-words").value)||0),minutes:Math.max(0,Number($("log-minutes").value)||0),chapterId:$("log-chapter").value,sceneId:$("log-scene").value,note:$("log-note").value.trim()});p.updatedAt=now();save();$("log-dialog").close();render();announce("Writing session logged.")};$("close-log").onclick=()=>$("log-dialog").close();$("cancel-log").onclick=()=>$("log-dialog").close();$("log-dialog").oncancel=e=>{e.preventDefault();$("log-dialog").close()};
 
-  function renderList() {
-    const list = $("project-list");
-    const query = $("project-search").value.trim().toLowerCase();
-    list.replaceChildren();
-    const matches = projects.filter(p => !query || [p.name,p.type,p.status,p.description].join(" ").toLowerCase().includes(query));
-    $("project-list-empty").hidden = matches.length > 0;
-    matches.forEach(project => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = project.id === selectedId ? "selected" : "";
-      button.setAttribute("role","listitem");
-      const title = document.createElement("span");
-      title.className = "project-list-title";
-      title.textContent = project.name || "Untitled project";
-      const meta = document.createElement("span");
-      meta.className = "project-list-meta";
-      meta.textContent = project.status + (project.deadline ? " · " + formatDate(project.deadline) : "");
-      button.append(title,meta);
-      button.addEventListener("click",() => selectProject(project.id));
-      list.appendChild(button);
-    });
-  }
-
-  function renderProject() {
-    const project = selectedProject();
-    $("empty-view").hidden = Boolean(project);
-    $("project-view").hidden = !project;
-    if (!project) return;
-
-    $("project-type-label").textContent = project.type;
-    $("project-heading").textContent = project.name;
-    $("project-description").textContent = project.description;
-    $("project-description").hidden = !project.description;
-    $("project-status").textContent = project.status;
-    $("project-goal").textContent = project.goal || "No goal set";
-    $("project-deadline").textContent = formatDate(project.deadline);
-    const complete = project.milestones.filter(m => m.done).length;
-    $("project-milestones").textContent = project.milestones.length ? complete + " of " + project.milestones.length + " complete" : "None yet";
-    $("current-task").textContent = project.currentTask || "No current task set. Edit the project when you know what comes next.";
-    $("project-notes").textContent = project.notes || "No notes yet.";
-    $("project-updated").textContent = formatUpdated(project.updatedAt);
-
-    const milestoneList = $("milestone-list");
-    milestoneList.replaceChildren();
-    if (!project.milestones.length) {
-      const empty = document.createElement("p"); empty.className="empty-state"; empty.textContent="No milestones yet."; milestoneList.appendChild(empty);
-    } else {
-      project.milestones.forEach(m => {
-        const row=document.createElement("div"); row.className="milestone" + (m.done ? " done" : "");
-        const check=document.createElement("input"); check.type="checkbox"; check.checked=m.done; check.setAttribute("aria-label","Mark milestone complete: "+m.title);
-        check.addEventListener("change",()=>{m.done=check.checked; project.updatedAt=now(); save(); render(); announce(m.done ? "Milestone completed." : "Milestone marked incomplete.");});
-        const title=document.createElement("span"); title.textContent=m.title;
-        const remove=document.createElement("button"); remove.type="button"; remove.className="icon-button small-icon"; remove.textContent="×"; remove.setAttribute("aria-label","Remove milestone: "+m.title);
-        remove.addEventListener("click",()=>{project.milestones=project.milestones.filter(x=>x.id!==m.id); project.updatedAt=now(); save(); render(); announce("Milestone removed.");});
-        row.append(check,title,remove); milestoneList.appendChild(row);
-      });
-    }
-
-    const links=$("project-links"); links.replaceChildren();
-    if (!project.links.length) {
-      const empty=document.createElement("p"); empty.className="empty-state"; empty.textContent="No links yet."; links.appendChild(empty);
-    } else project.links.forEach(l=>{
-      const row=document.createElement("div"); row.className="link-item";
-      const a=document.createElement("a"); a.href=l.url; a.target="_blank"; a.rel="noopener noreferrer"; a.textContent=l.label || l.url;
-      const remove=document.createElement("button"); remove.type="button"; remove.className="icon-button small-icon"; remove.textContent="×"; remove.setAttribute("aria-label","Remove link: "+(l.label || l.url));
-      remove.addEventListener("click",()=>{project.links=project.links.filter(x=>x.id!==l.id); project.updatedAt=now(); save(); render(); announce("Link removed.");});
-      row.append(a,remove); links.appendChild(row);
-    });
-  }
-
-  function render() { renderList(); renderProject(); }
-
-  function openEditor(project) {
-    editingId = project?.id || null;
-    const p = project ? cleanProject(project) : blankProject();
-    $("dialog-title").textContent = project ? "Edit project" : "New project";
-    $("field-name").value=p.name; $("field-type").value=p.type; $("field-status").value=p.status; $("field-goal").value=p.goal;
-    $("field-deadline").value=p.deadline; $("field-task").value=p.currentTask; $("field-description").value=p.description; $("field-notes").value=p.notes;
-    renderEditorLists(p);
-    $("dialog-error").hidden=true;
-    $("project-dialog").showModal();
-    requestAnimationFrame(()=>$("field-name").focus());
-  }
-  function renderEditorLists(p) {
-    const milestones=$("form-milestones"); milestones.replaceChildren();
-    p.milestones.forEach(m=>addMilestoneEditor(milestones,m));
-    const links=$("form-links"); links.replaceChildren();
-    p.links.forEach(l=>addLinkEditor(links,l));
-  }
-  function addMilestoneEditor(container, value={id:uid("milestone"),title:"",done:false}) {
-    const row=document.createElement("div"); row.className="editor-row"; row.dataset.id=value.id;
-    const input=document.createElement("input"); input.type="text"; input.maxLength=180; input.value=value.title; input.placeholder="Milestone";
-    const remove=document.createElement("button"); remove.type="button"; remove.className="icon-button small-icon"; remove.textContent="×"; remove.setAttribute("aria-label","Remove milestone field");
-    remove.addEventListener("click",()=>row.remove()); row.append(input,remove); container.appendChild(row);
-  }
-  function addLinkEditor(container, value={id:uid("link"),label:"",url:""}) {
-    const row=document.createElement("div"); row.className="editor-link-row"; row.dataset.id=value.id;
-    const label=document.createElement("input"); label.type="text"; label.maxLength=100; label.value=value.label; label.placeholder="Label";
-    const url=document.createElement("input"); url.type="url"; url.maxLength=500; url.value=value.url; url.placeholder="https://...";
-    const remove=document.createElement("button"); remove.type="button"; remove.className="icon-button small-icon"; remove.textContent="×"; remove.setAttribute("aria-label","Remove link field");
-    remove.addEventListener("click",()=>row.remove()); row.append(label,url,remove); container.appendChild(row);
-  }
-  function readForm() {
-    const name=$("field-name").value.trim();
-    if (!name) throw new Error("A project name is required.");
-    const milestones=[...$("form-milestones").querySelectorAll(".editor-row")].map(row=>({id:row.dataset.id || uid("milestone"),title:row.querySelector("input").value.trim(),done:false})).filter(m=>m.title);
-    const links=[...$("form-links").querySelectorAll(".editor-link-row")].map(row=>({id:row.dataset.id || uid("link"),label:row.querySelectorAll("input")[0].value.trim(),url:row.querySelectorAll("input")[1].value.trim()})).filter(l=>l.url);
-    links.forEach(l=>{try{new URL(l.url);}catch{throw new Error("Please check the URL for: " + (l.label || l.url));}});
-    const existing=editingId ? selectedProject() : null;
-    if (existing) {
-      const oldById=new Map(existing.milestones.map(m=>[m.id,m]));
-      milestones.forEach(m=>{if(oldById.has(m.id))m.done=oldById.get(m.id).done;});
-    }
-    return {id:existing?.id || uid("project"),name,type:$("field-type").value,status:$("field-status").value,goal:$("field-goal").value.trim(),
-      deadline:$("field-deadline").value, currentTask:$("field-task").value.trim(), description:$("field-description").value.trim(),
-      milestones,links,notes:$("field-notes").value.trim(),createdAt:existing?.createdAt || now(),updatedAt:now()};
-  }
-  function closeDialog() { $("project-dialog").close(); editingId=null; }
-  function addSimple(type) {
-    const project=selectedProject(); if(!project)return;
-    const dialog=$("simple-dialog"), label=$("simple-label"), title=$("simple-title");
-    title.textContent=type==="milestone" ? "Add milestone" : "Add link";
-    label.replaceChildren();
-    if(type==="milestone") {
-      label.append("Milestone title");
-      const input=document.createElement("input"); input.id="simple-value"; input.type="text"; input.maxLength=180; input.required=true; label.appendChild(input);
-    } else {
-      label.append("Link label");
-      const wrap=document.createElement("div"); wrap.className="settings-grid";
-      const text=document.createElement("input"); text.id="simple-label-value"; text.type="text"; text.maxLength=100; text.placeholder="Label";
-      const url=document.createElement("input"); url.id="simple-value"; url.type="url"; url.maxLength=500; url.placeholder="https://..."; url.required=true;
-      wrap.append(text,url); label.appendChild(wrap);
-    }
-    dialog.dataset.type=type; dialog.showModal(); requestAnimationFrame(()=>$(type==="milestone"?"simple-value":"simple-label-value").focus());
-  }
-
-  $("new-project").addEventListener("click",()=>openEditor(null));
-  $("empty-new-project").addEventListener("click",()=>openEditor(null));
-  $("edit-project").addEventListener("click",()=>{const p=selectedProject();if(p)openEditor(p);});
-  $("delete-project").addEventListener("click",()=>{const p=selectedProject();if(!p)return;if(confirm("Delete “"+p.name+"”? This cannot be undone.")){projects=projects.filter(x=>x.id!==p.id);selectedId=projects[0]?.id||null;save();if(selectedId)localStorage.setItem(SELECTED_KEY,selectedId);else localStorage.removeItem(SELECTED_KEY);render();announce("Project deleted.");}});
-  $("add-milestone").addEventListener("click",()=>addSimple("milestone"));
-  $("add-link").addEventListener("click",()=>addSimple("link"));
-  $("form-add-milestone").addEventListener("click",()=>addMilestoneEditor($("form-milestones")));
-  $("form-add-link").addEventListener("click",()=>addLinkEditor($("form-links")));
-  $("project-search").addEventListener("input",renderList);
-
-  $("project-form").addEventListener("submit",event=>{
-    event.preventDefault();
-    try {
-      const p=readForm();
-      const index=projects.findIndex(x=>x.id===p.id);
-      if(index>=0) projects[index]=p; else projects.unshift(p);
-      selectedId=p.id; localStorage.setItem(SELECTED_KEY,p.id); save(); closeDialog(); render(); announce(index>=0 ? "Project updated." : "Project created.");
-    } catch(error) { $("dialog-error").textContent=error.message; $("dialog-error").hidden=false; }
-  });
-  $("close-dialog").addEventListener("click",closeDialog); $("cancel-dialog").addEventListener("click",closeDialog);
-  $("project-dialog").addEventListener("cancel",event=>{event.preventDefault();closeDialog();});
-  $("simple-form").addEventListener("submit",event=>{
-    event.preventDefault(); const p=selectedProject(); if(!p)return;
-    const type=$("simple-dialog").dataset.type;
-    if(type==="milestone"){const value=$("simple-value").value.trim();if(!value)return;p.milestones.push({id:uid("milestone"),title:value,done:false});announce("Milestone added.");}
-    else {const url=$("simple-value").value.trim();const label=$("simple-label-value").value.trim();try{new URL(url);}catch{$("simple-value").setCustomValidity("Enter a complete URL.");$("simple-value").reportValidity();return;}p.links.push({id:uid("link"),label:label||url,url});announce("Link added.");}
-    p.updatedAt=now();save();$("simple-dialog").close();render();
-  });
-  $("close-simple").addEventListener("click",()=>$("simple-dialog").close());
-  $("cancel-simple").addEventListener("click",()=>$("simple-dialog").close());
-  $("simple-dialog").addEventListener("cancel",event=>{event.preventDefault();$("simple-dialog").close();});
-
-  $("export-projects").addEventListener("click",()=>{
-    const blob=new Blob([JSON.stringify({format:"tlc-storyworks-projects",version:1,exportedAt:now(),projects},null,2)],{type:"application/json"});
-    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="tlc-storyworks-projects.json";a.click();URL.revokeObjectURL(url);announce("Project backup exported.");
-  });
-  $("import-projects").addEventListener("click",()=>$("import-file").click());
-  $("import-file").addEventListener("change",async event=>{
-    const file=event.target.files?.[0];if(!file)return;
-    try {
-      const data=JSON.parse(await file.text());
-      if(data?.format!=="tlc-storyworks-projects" || !Array.isArray(data.projects))throw new Error("That file does not look like a TLC Storyworks project backup.");
-      const imported=data.projects.map(cleanProject);
-      const replace=confirm("Import "+imported.length+" project(s)? Choose OK to replace your current projects, or Cancel to keep them and add the imported projects.");
-      if(replace) projects=imported; else {
-        const existingIds=new Set(projects.map(p=>p.id));
-        imported.forEach(p=>{if(existingIds.has(p.id))p.id=uid("project");projects.push(p);});
-      }
-      selectedId=projects[0]?.id||null;save();if(selectedId)localStorage.setItem(SELECTED_KEY,selectedId);render();announce("Projects imported.");
-    } catch(error) { alert(error.message || "Could not import that file."); }
-    event.target.value="";
-  });
-
-  render();
+const base=new URL(location.href);base.search="";base.hash="";$("direct-url").textContent=base.href;const embed=new URL(base.href);embed.search="?embed";$("embed-url").textContent=embed.href;$("iframe-code").textContent='<iframe src="'+embed.href+'" width="100%" height="900" frameborder="0" title="TLC Storyworks Project Tracker"></iframe>';document.querySelectorAll(".copy-url").forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText($(b.dataset.url).textContent);const old=b.textContent;b.textContent="Copied!";setTimeout(()=>b.textContent=old,1200)}catch{announce("Copy failed.")}});
+$("export-projects").onclick=()=>{const blob=new Blob([JSON.stringify({format:"tlc-storyworks-projects",version:2,exportedAt:now(),projects},null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="tlc-storyworks-projects.json";a.click();URL.revokeObjectURL(url);announce("Project backup exported.")};
+$("import-projects").onclick=()=>$("import-file").click();$("import-file").onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{const d=JSON.parse(await f.text());if(d?.format!=="tlc-storyworks-projects"||!Array.isArray(d.projects))throw Error("That file does not look like a TLC Storyworks project backup.");const imp=d.projects.map(cleanProject);if(confirm("Import "+imp.length+" project(s) and replace your current projects?"))projects=imp;else{const ids=new Set(projects.map(p=>p.id));imp.forEach(p=>{if(ids.has(p.id))p.id=uid("project");projects.push(p)})}selectedId=projects[0]?.id||null;save();if(selectedId)localStorage.setItem(SELECTED_KEY,selectedId);render();announce("Projects imported.")}catch(err){alert(err.message||"Could not import that file.")}e.target.value=""};
+render();
 })();
