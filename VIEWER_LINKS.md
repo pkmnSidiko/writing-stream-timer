@@ -15,11 +15,11 @@ Examples:
 - `?viewer&theme=ink-paper`
 - `?viewer&theme=contrast`
 
-Viewer links should **not** serialize widget configuration into the URL. Do not put timer stages, project data, custom settings, or JSON blobs into a viewer URL.
+Viewer links should **not** serialize widget configuration or project data into the URL. Do not put timer stages, project data, custom settings, or JSON blobs into a viewer URL. A widget may include a small non-content identifier such as a project ID when that identifier is only used to select data already present in the browser.
 
 ## Widget behavior
 
-The normal widget page handles configuration and local saving. Viewer mode is display-only and receives only the named appearance preset.
+The normal widget page handles configuration and local saving. Viewer mode is display-only and receives the named appearance preset. Project Tracker additionally accepts a project ID so a stream/browser display can stay pointed at one local project while the project data remains in browser storage.
 
 The shared `embed.js` helper:
 
