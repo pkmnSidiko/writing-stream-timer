@@ -151,12 +151,12 @@ The project site will use the repository's GitHub Pages URL with relative links,
 ### Writing & Progress
 - [x] Word tracker
 - [x] Writing session / sprint tools
-- [ ] Project and progress tracker
-- [ ] Writing goals and deadlines
-- [ ] Writing log / session history
+- [x] Project and progress tracker
+- [x] Writing goals and deadlines
+- [x] Writing log / session history
 - [ ] Optional gentle streak tracking
-- [ ] Chapter tracker
-- [ ] Scene tracker
+- [x] Chapter tracker
+- [x] Scene tracker
 - [ ] Book / series tracker
 
 ### Prompts & Creative Tools
