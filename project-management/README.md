@@ -19,28 +19,20 @@ It does not read manuscript files. Word Tracker remains the dedicated tool for d
 
 ## Project Management Framework
 
-The tracker uses a small, platform-neutral framework rather than a rigid methodology:
-
 **Project → goals/deadlines → milestones → structure (chapters/scenes) → sessions → progress**
 
-Not every project needs every layer. A poem can use only a project and milestones. A novel can use chapters and scenes. A research project can use milestones and a session log.
-
-The framework is documented in [FRAMEWORK.md](FRAMEWORK.md).
+Not every project needs every layer. The framework is documented in [FRAMEWORK.md](FRAMEWORK.md).
 
 ## Storage
 
-Project data stays in browser localStorage. Nothing is sent to a server.
-
-Because browser storage is device/browser-specific, use **Export projects** for backup or transfer.
+Project data stays in browser localStorage. Nothing is sent to a server. Export projects to back up or move them.
 
 ## Import compatibility
 
-Version 1 project backups are accepted. Older projects automatically gain chapters, scenes, and writing-log fields.
+Version 1 project backups are accepted and gain the newer chapters/scenes/log fields.
 
 ## Viewer and embeds
 
-The tracker supports an interactive `?embed` mode that removes the surrounding site chrome. A cross-device `?viewer` mode is intentionally not provided yet: local project data cannot safely be selected on another device without a sharing/sync model, and project data is never serialized into URLs.
+The tracker supports an interactive `?embed` mode. A cross-device `?viewer` mode is intentionally not offered yet because local project data cannot safely be selected on another device without a sharing model. Project data is never serialized into URLs.
 
-## Design goal
-
-The tracker should be useful to someone who has never used another TLC Storyworks tool. The framework exists to make future tools compatible, not to require writers to adopt a particular productivity method.
+The tracker is designed to be useful on its own; the framework exists to make future TLC Storyworks tools compatible, not to impose a productivity method.
