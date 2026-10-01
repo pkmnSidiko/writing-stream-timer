@@ -51,10 +51,9 @@ const TLC_EMBED = (() => {
     result.search = "";
     result.hash = "";
     if (mode === "viewer") {
-      result.searchParams.set("viewer", "");
-      result.searchParams.set("theme", currentTheme());
+      result.search = "?viewer&theme=" + encodeURIComponent(currentTheme());
     } else if (mode === "embed") {
-      result.searchParams.set("embed", "");
+      result.search = "?embed";
     }
     return result.href;
   }
