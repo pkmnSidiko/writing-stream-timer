@@ -1,5 +1,5 @@
 const PROJECT_MANAGEMENT_CONFIG = Object.freeze({
-  status: "scaffold",
+  status: "mvp",
   publicTool: false,
   viewerSupported: false,
   storage: "local-browser",
