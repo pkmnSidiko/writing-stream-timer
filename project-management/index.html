@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A simple local-first project tracker for writers and storytellers.">
+  <meta name="description" content="A local-first project tracker for writers and storytellers, with goals, milestones, chapters, scenes, and a writing log.">
   <title>Project Tracker · TLC Storyworks</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="../theme.css">
@@ -11,32 +11,28 @@
 </head>
 <body>
   <a class="back-link" href="../">← Writing Tools</a>
-
   <main class="project-shell" id="top">
     <header class="project-header">
       <p class="eyebrow">TLC Storyworks · Writing Tools</p>
       <h1>Project Tracker</h1>
-      <p class="lede">Keep the shape of a writing project in one place: what it is, where it stands, what comes next, and what still needs doing.</p>
+      <p class="lede">Keep a writing project organized without putting the manuscript in the tool: projects, goals, milestones, chapters, scenes, and writing sessions all in one local-first workspace.</p>
     </header>
 
     <div class="app-layout">
       <aside class="project-list-panel" aria-labelledby="projects-heading">
         <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Your projects</p>
-            <h2 id="projects-heading">Projects</h2>
-          </div>
+          <div><p class="eyebrow">Your projects</p><h2 id="projects-heading">Projects</h2></div>
           <button id="new-project" class="primary small" type="button">+ New</button>
         </div>
         <label class="search-field">Find a project<input id="project-search" type="search" placeholder="Search projects" autocomplete="off"></label>
         <div id="project-list" class="project-list" role="list"></div>
-        <div id="project-list-empty" class="empty-state" hidden>No projects yet. Start with a project you are currently working on.</div>
+        <div id="project-list-empty" class="empty-state" hidden>No matching projects.</div>
       </aside>
 
       <section class="project-main" aria-labelledby="project-heading">
         <div id="empty-view" class="empty-view">
           <h2>Start a project</h2>
-          <p>Create a project to keep its goals, milestones, next task, links, and notes together.</p>
+          <p>Create a project to keep its goals, milestones, chapters, scenes, writing log, links, and notes together.</p>
           <button id="empty-new-project" class="primary" type="button">Create a project</button>
         </div>
 
@@ -54,55 +50,58 @@
           </div>
 
           <div class="overview-grid" aria-label="Project overview">
-            <div class="info-card">
-              <span class="info-label">Status</span>
-              <strong id="project-status"></strong>
-            </div>
-            <div class="info-card">
-              <span class="info-label">Goal</span>
-              <strong id="project-goal"></strong>
-            </div>
-            <div class="info-card">
-              <span class="info-label">Deadline</span>
-              <strong id="project-deadline"></strong>
-            </div>
-            <div class="info-card">
-              <span class="info-label">Milestones</span>
-              <strong id="project-milestones"></strong>
-            </div>
+            <div class="info-card"><span class="info-label">Status</span><strong id="project-status"></strong></div>
+            <div class="info-card"><span class="info-label">Goal</span><strong id="project-goal"></strong></div>
+            <div class="info-card"><span class="info-label">Deadline</span><strong id="project-deadline"></strong></div>
+            <div class="info-card"><span class="info-label">Progress</span><strong id="project-progress"></strong></div>
           </div>
 
-          <section class="tracker-section next-task-section" aria-labelledby="next-task-heading">
-            <div class="section-heading">
-              <div><p class="eyebrow">Right now</p><h3 id="next-task-heading">Current task</h3></div>
-            </div>
-            <p id="current-task" class="current-task"></p>
-          </section>
+          <nav class="project-tabs" aria-label="Project sections">
+            <button type="button" class="tab-button selected" data-tab="overview">Overview</button>
+            <button type="button" class="tab-button" data-tab="chapters">Chapters &amp; scenes</button>
+            <button type="button" class="tab-button" data-tab="log">Writing log</button>
+          </nav>
 
-          <section class="tracker-section" aria-labelledby="milestones-heading">
-            <div class="section-heading">
-              <div><p class="eyebrow">Progress</p><h3 id="milestones-heading">Milestones</h3></div>
-              <button id="add-milestone" class="small" type="button">+ Add milestone</button>
-            </div>
-            <div id="milestone-list" class="milestone-list"></div>
-          </section>
-
-          <div class="two-column">
-            <section class="tracker-section" aria-labelledby="links-heading">
-              <div class="section-heading">
-                <div><p class="eyebrow">References</p><h3 id="links-heading">Links</h3></div>
-                <button id="add-link" class="small" type="button">+ Add link</button>
-              </div>
-              <div id="project-links" class="link-list"></div>
+          <section id="tab-overview" class="tab-panel" aria-labelledby="overview-tab-heading">
+            <section class="tracker-section next-task-section" aria-labelledby="next-task-heading">
+              <div class="section-heading"><div><p class="eyebrow">Right now</p><h3 id="next-task-heading">Current task</h3></div></div>
+              <p id="current-task" class="current-task"></p>
             </section>
 
-            <section class="tracker-section" aria-labelledby="notes-heading">
-              <div class="section-heading">
-                <div><p class="eyebrow">Scratch space</p><h3 id="notes-heading">Notes</h3></div>
-              </div>
-              <p id="project-notes" class="notes"></p>
+            <section class="tracker-section" aria-labelledby="milestones-heading">
+              <div class="section-heading"><div><p class="eyebrow">Project progress</p><h3 id="milestones-heading">Milestones</h3></div><button id="add-milestone" class="small" type="button">+ Add milestone</button></div>
+              <div id="milestone-list" class="milestone-list"></div>
             </section>
-          </div>
+
+            <div class="two-column">
+              <section class="tracker-section" aria-labelledby="links-heading">
+                <div class="section-heading"><div><p class="eyebrow">References</p><h3 id="links-heading">Links</h3></div><button id="add-link" class="small" type="button">+ Add link</button></div>
+                <div id="project-links" class="link-list"></div>
+              </section>
+              <section class="tracker-section" aria-labelledby="notes-heading">
+                <div class="section-heading"><div><p class="eyebrow">Scratch space</p><h3 id="notes-heading">Notes</h3></div></div>
+                <p id="project-notes" class="notes"></p>
+              </section>
+            </div>
+          </section>
+
+          <section id="tab-chapters" class="tab-panel" hidden aria-labelledby="chapters-heading">
+            <div class="section-heading">
+              <div><p class="eyebrow">Structure</p><h3 id="chapters-heading">Chapters &amp; scenes</h3></div>
+              <button id="add-chapter" class="small" type="button">+ Add chapter</button>
+            </div>
+            <p class="section-help">Use chapters and scenes when they help. Other project types can simply leave this section empty.</p>
+            <div id="chapter-list" class="chapter-list"></div>
+          </section>
+
+          <section id="tab-log" class="tab-panel" hidden aria-labelledby="log-heading">
+            <div class="section-heading">
+              <div><p class="eyebrow">Session history</p><h3 id="log-heading">Writing log</h3></div>
+              <button id="add-log-entry" class="small" type="button">+ Log session</button>
+            </div>
+            <div id="log-summary" class="log-summary"></div>
+            <div id="writing-log" class="writing-log"></div>
+          </section>
 
           <p id="project-updated" class="updated-label"></p>
         </div>
@@ -110,14 +109,19 @@
     </div>
 
     <details class="data-tools">
-      <summary>Project data</summary>
+      <summary>Project data &amp; sharing</summary>
       <div class="data-tools-content">
-        <p>Your projects are stored only in this browser. Export a backup if you want to move them to another browser or device.</p>
-        <div class="button-row">
-          <button id="export-projects" type="button">Export projects</button>
-          <button id="import-projects" type="button">Import projects</button>
-          <input id="import-file" type="file" accept="application/json,.json" hidden>
-        </div>
+        <p>Projects stay in this browser. Export a backup to move them to another browser or device. Imported/exported project files include chapters, scenes, and writing-log entries.</p>
+        <div class="button-row"><button id="export-projects" type="button">Export projects</button><button id="import-projects" type="button">Import projects</button><input id="import-file" type="file" accept="application/json,.json" hidden></div>
+      </div>
+    </details>
+
+    <details class="usage-help">
+      <summary>Using the tracker elsewhere</summary>
+      <div class="usage-content">
+        <section><h2>Website / Embed</h2><p>Use the embed URL for an interactive copy without the surrounding navigation and footer. It uses the same browser-local project data.</p><div class="url-box"><code id="embed-url"></code><button type="button" class="copy-url" data-url="embed-url">Copy</button></div><div class="code-box"><code id="iframe-code"></code><button type="button" class="copy-url" data-url="iframe-code">Copy iframe</button></div></section>
+        <section><h2>Direct use</h2><p>Use the normal page for the full tracker.</p><div class="url-box"><code id="direct-url"></code><button type="button" class="copy-url" data-url="direct-url">Copy</button></div></section>
+        <section><h2>Viewer displays</h2><p>A cross-device viewer is intentionally not offered yet. Project data is local to the browser, and the URL does not contain project data. A future sharing model can add a safe display mode without changing that principle.</p></section>
       </div>
     </details>
   </main>
@@ -125,88 +129,57 @@
   <footer class="site-footer">
     <p class="copyright">© 2026 TLC Storyworks</p>
     <nav class="footer-links" aria-label="TLC Storyworks links">
-      <a href="../">Home</a>
-      <a href="https://github.com/tlcstoryworks/writer-tools">Repository</a>
-      <a href="../LICENSE">License</a>
+      <a href="../">← Back</a><a href="../">Home</a><a href="https://github.com/sponsors/tlcstoryworks">Support project</a><a href="https://github.com/tlcstoryworks/writer-tools/discussions">Discussions</a><a href="https://github.com/tlcstoryworks/writer-tools">Repository</a><a href="#top">Top ↑</a><a href="../SECURITY.md">Security</a><a href="../LICENSE">License</a>
     </nav>
   </footer>
 
   <dialog id="project-dialog" class="settings-dialog" aria-labelledby="dialog-title">
     <form method="dialog" id="project-form" class="settings-card">
-      <div class="settings-header">
-        <div><div class="eyebrow">Project Tracker</div><h2 id="dialog-title">New project</h2></div>
-        <button type="button" id="close-dialog" class="icon-button" aria-label="Close">×</button>
-      </div>
-
+      <div class="settings-header"><div><div class="eyebrow">Project Tracker</div><h2 id="dialog-title">New project</h2></div><button type="button" id="close-dialog" class="icon-button" aria-label="Close">×</button></div>
       <div class="settings-grid">
         <label>Project name<input id="field-name" type="text" maxlength="120" required></label>
-        <label>Type
-          <select id="field-type">
-            <option>Novel</option>
-            <option>Short story</option>
-            <option>Fanfiction</option>
-            <option>Poetry</option>
-            <option>Nonfiction</option>
-            <option>RPG / worldbuilding</option>
-            <option>Zine / collection</option>
-            <option>Other</option>
-          </select>
-        </label>
-        <label>Status
-          <select id="field-status">
-            <option>Idea</option>
-            <option>Planning</option>
-            <option>Drafting</option>
-            <option>Revising</option>
-            <option>Editing</option>
-            <option>On hold</option>
-            <option>Complete</option>
-          </select>
-        </label>
+        <label>Type<select id="field-type"><option>Novel</option><option>Short story</option><option>Fanfiction</option><option>Poetry</option><option>Nonfiction</option><option>RPG / worldbuilding</option><option>Zine / collection</option><option>Other</option></select></label>
+        <label>Status<select id="field-status"><option>Idea</option><option>Planning</option><option>Drafting</option><option>Revising</option><option>Editing</option><option>On hold</option><option>Complete</option></select></label>
         <label>Goal (optional)<input id="field-goal" type="text" maxlength="120" placeholder="50,000 words, first draft, submission, etc."></label>
         <label>Deadline (optional)<input id="field-deadline" type="date"></label>
         <label class="full-field">Current task<input id="field-task" type="text" maxlength="240" placeholder="What are you working on next?"></label>
       </div>
-
       <label class="full-field">Description (optional)<textarea id="field-description" rows="3" maxlength="500" placeholder="A short description of the project."></textarea></label>
-
-      <div class="dialog-section">
-        <div class="section-heading"><h3>Milestones</h3><button id="form-add-milestone" class="small" type="button">+ Add</button></div>
-        <div id="form-milestones" class="editor-list"></div>
-      </div>
-
-      <div class="dialog-section">
-        <div class="section-heading"><h3>Links</h3><button id="form-add-link" class="small" type="button">+ Add</button></div>
-        <div id="form-links" class="editor-list"></div>
-      </div>
-
+      <div class="dialog-section"><div class="section-heading"><h3>Milestones</h3><button id="form-add-milestone" class="small" type="button">+ Add</button></div><div id="form-milestones" class="editor-list"></div></div>
+      <div class="dialog-section"><div class="section-heading"><h3>Links</h3><button id="form-add-link" class="small" type="button">+ Add</button></div><div id="form-links" class="editor-list"></div></div>
       <label class="full-field">Notes (optional)<textarea id="field-notes" rows="5" maxlength="5000" placeholder="Anything you want to keep with this project."></textarea></label>
-
       <p id="dialog-error" class="dialog-error" role="alert" hidden></p>
-      <div class="settings-actions">
-        <span class="settings-spacer"></span>
-        <button type="button" id="cancel-dialog">Cancel</button>
-        <button type="submit" class="primary">Save project</button>
-      </div>
+      <div class="settings-actions"><span class="settings-spacer"></span><button type="button" id="cancel-dialog">Cancel</button><button type="submit" class="primary">Save project</button></div>
     </form>
   </dialog>
 
   <dialog id="simple-dialog" class="settings-dialog" aria-labelledby="simple-title">
     <form method="dialog" id="simple-form" class="settings-card">
-      <div class="settings-header">
-        <div><div class="eyebrow">Project Tracker</div><h2 id="simple-title"></h2></div>
-        <button type="button" id="close-simple" class="icon-button" aria-label="Close">×</button>
-      </div>
+      <div class="settings-header"><div><div class="eyebrow">Project Tracker</div><h2 id="simple-title"></h2></div><button type="button" id="close-simple" class="icon-button" aria-label="Close">×</button></div>
       <label id="simple-label"></label>
       <div class="settings-actions"><span class="settings-spacer"></span><button type="button" id="cancel-simple">Cancel</button><button type="submit" class="primary">Save</button></div>
     </form>
   </dialog>
 
-  <div id="tracker-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+  <dialog id="log-dialog" class="settings-dialog" aria-labelledby="log-title">
+    <form method="dialog" id="log-form" class="settings-card">
+      <div class="settings-header"><div><div class="eyebrow">Writing log</div><h2 id="log-title">Log a session</h2></div><button type="button" id="close-log" class="icon-button" aria-label="Close">×</button></div>
+      <div class="settings-grid">
+        <label>Date<input id="log-date" type="date" required></label>
+        <label>Activity<select id="log-activity"><option>Writing</option><option>Planning</option><option>Revising</option><option>Editing</option><option>Research</option><option>Worldbuilding</option><option>Other</option></select></label>
+        <label>Words (optional)<input id="log-words" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></label>
+        <label>Minutes (optional)<input id="log-minutes" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></label>
+      </div>
+      <div class="settings-grid">
+        <label>Chapter (optional)<select id="log-chapter"><option value="">No chapter</option></select></label>
+        <label>Scene (optional)<select id="log-scene"><option value="">No scene</option></select></label>
+      </div>
+      <label class="full-field">Note (optional)<input id="log-note" type="text" maxlength="240" placeholder="What did you work on?"></label>
+      <div class="settings-actions"><span class="settings-spacer"></span><button type="button" id="cancel-log">Cancel</button><button type="submit" class="primary">Save session</button></div>
+    </form>
+  </dialog>
 
-  <script src="../embed.js"></script>
-  <script src="config.js"></script>
-  <script src="app.js"></script>
-  <script src="../theme.js"></script>
+  <div id="tracker-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+  <script src="../embed.js"></script><script src="config.js"></script><script src="app.js"></script><script src="../theme.js"></script>
 </body>
 </html>
