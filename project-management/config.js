@@ -1,1 +1,1 @@
-const PROJECT_MANAGEMENT_CONFIG=Object.freeze({status:"public",publicTool:true,viewerSupported:true,storage:"local-browser",dataModelVersion:2,sharedInfrastructure:{theme:"../theme.js",viewerLinks:"../embed.js",links:"../links.css"}});
+const PROJECT_MANAGEMENT_CONFIG=Object.freeze({status:"public",publicTool:true,viewerSupported:false,storage:"local-browser",dataModelVersion:2,sharedInfrastructure:{theme:"../theme.js",viewerLinks:"../embed.js",links:"../links.css"}});
