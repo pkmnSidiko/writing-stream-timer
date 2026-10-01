@@ -65,8 +65,8 @@ const TLC_EMBED = (() => {
   }
 
   function scheduleLinkRefresh() {
-    setTimeout(refreshViewerLinks, 0);
-    window.addEventListener("tlc-theme-changed", refreshViewerLinks);
+    setTimeout(() => { applyViewerTheme(); refreshViewerLinks(); }, 0);
+    window.addEventListener("tlc-theme-changed", () => { applyViewerTheme(); refreshViewerLinks(); });
   }
 
   applyMode();
