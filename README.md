@@ -151,7 +151,7 @@ The project site will use the repository's GitHub Pages URL with relative links,
 ### Writing & Progress
 - [x] Word tracker
 - [x] Writing session / sprint tools
-- [x] Project and progress tracker
+- [ ] Project and progress tracker — on hold for review
 - [x] Writing goals and deadlines
 - [x] Writing log / session history
 - [ ] Optional gentle streak tracking
