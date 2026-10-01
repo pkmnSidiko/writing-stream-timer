@@ -90,6 +90,12 @@ The tracker stores its project data locally in the browser. Appearance settings 
 │   ├── index.html
 │   ├── style.css
 │   └── app.js
+├── project-management/
+│   ├── index.html          # scaffolding / future project-management tools
+│   ├── style.css
+│   ├── app.js
+│   ├── config.js
+│   └── README.md
 ├── theme.css         # Shared appearance/theme styles
 ├── theme.js          # Shared appearance/theme controls
 ├── links.css         # Shared link and navigation styles
