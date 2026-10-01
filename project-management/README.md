@@ -33,6 +33,6 @@ Version 1 project backups are accepted and gain the newer chapters/scenes/log fi
 
 ## Viewer and embeds
 
-The tracker supports an interactive `?embed` mode. A cross-device `?viewer` mode is intentionally not offered yet because local project data cannot safely be selected on another device without a sharing model. Project data is never serialized into URLs.
+The tracker supports both an interactive `?embed` mode and a display-only `?viewer&theme=<preset>&project=<id>` mode for stream/browser displays. The viewer link carries only the named theme and project ID; project data remains in browser localStorage and is never serialized into the URL. The viewer is therefore tied to the browser that has the project data, rather than pretending to be a cross-device publishing system.
 
 The tracker is designed to be useful on its own; the framework exists to make future TLC Storyworks tools compatible, not to impose a productivity method.
