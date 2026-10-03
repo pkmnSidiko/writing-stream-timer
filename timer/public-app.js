@@ -3,6 +3,7 @@
 
   const STORAGE_KEY = "tlc-storyworks-public-pomodoro";
   const THEME_STORAGE_KEY = "tlc-storyworks-theme";
+  const SOUND_STORAGE_KEY = "tlc-storyworks-pomodoro-sound";
   const params = new URLSearchParams(location.search);
   const viewerMode = params.has("viewer");
 
@@ -17,6 +18,9 @@
   const $ = id => document.getElementById(id);
   let presetKey = "classic";
   let stages = [];
+  let audioContext = null;
+  let soundEnabled = true;
+  let soundVolume = 0.55;
   const state = { stageIndex: 0, remaining: 0, running: false, lastTick: null, lastTimeLabel: null };
 
   function announce(message) {
@@ -53,6 +57,66 @@
     try { return JSON.parse(localStorage.getItem(THEME_STORAGE_KEY))?.preset || "neutral"; }
     catch { return "neutral"; }
   }
+  function loadSoundSettings() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(SOUND_STORAGE_KEY));
+      if (saved) {
+        soundEnabled = saved.enabled !== false;
+        soundVolume = Number.isFinite(saved.volume) ? Math.min(1, Math.max(0, saved.volume)) : 0.55;
+      }
+    } catch {}
+    if ($("sound-enabled")) $("sound-enabled").checked = soundEnabled;
+    if ($("sound-volume")) $("sound-volume").value = String(soundVolume);
+  }
+  function saveSoundSettings() {
+    localStorage.setItem(SOUND_STORAGE_KEY, JSON.stringify({ enabled: soundEnabled, volume: soundVolume }));
+  }
+  function getAudioContext() {
+    if (!audioContext) {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) return null;
+      audioContext = new AudioCtor();
+    }
+    if (audioContext.state === "suspended") audioContext.resume();
+    return audioContext;
+  }
+  function tone(frequency, start, duration, volume, type = "sine") {
+    const ctx = getAudioContext();
+    if (!ctx || !soundEnabled) return;
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, ctx.currentTime + start);
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime + start);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, volume * soundVolume), ctx.currentTime + start + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + start + duration);
+    oscillator.connect(gain).connect(ctx.destination);
+    oscillator.start(ctx.currentTime + start);
+    oscillator.stop(ctx.currentTime + start + duration + 0.02);
+  }
+  function playSound(kind) {
+    if (!soundEnabled) return;
+    if (kind === "work") {
+      tone(659.25, 0, 0.22, 0.7);
+      tone(783.99, 0.2, 0.28, 0.65);
+    } else if (kind === "break") {
+      tone(783.99, 0, 0.18, 0.65);
+      tone(659.25, 0.18, 0.18, 0.55);
+      tone(523.25, 0.36, 0.3, 0.5);
+    } else if (kind === "longBreak") {
+      tone(659.25, 0, 0.2, 0.65);
+      tone(783.99, 0.22, 0.2, 0.65);
+      tone(987.77, 0.44, 0.28, 0.6);
+    } else if (kind === "complete") {
+      tone(523.25, 0, 0.22, 0.55);
+      tone(659.25, 0.25, 0.22, 0.55);
+      tone(783.99, 0.5, 0.22, 0.6);
+      tone(1046.5, 0.75, 0.45, 0.65);
+    }
+  }
+  function soundForStage(stage) {
+    return stage?.writing ? "work" : stage?.name === "Long Break" ? "longBreak" : "break";
+  }
   function reset() {
     state.running = false; state.stageIndex = 0; state.remaining = stages[0].minutes * 60;
     state.lastTick = null; state.lastTimeLabel = null; render(); announce("Timer reset. Writing ready.");
@@ -63,10 +127,10 @@
   }
   function advance() {
     if (state.stageIndex >= stages.length - 1) {
-      state.running = false; state.remaining = 0; state.lastTick = null; state.lastTimeLabel = null; render(); announce("Pomodoro session complete."); return;
+      state.running = false; state.remaining = 0; state.lastTick = null; state.lastTimeLabel = null; render(); playSound("complete"); announce("Pomodoro session complete."); return;
     }
     state.stageIndex += 1; state.remaining = stages[state.stageIndex].minutes * 60; state.lastTick = null; state.lastTimeLabel = null;
-    render(); announce(stages[state.stageIndex].name + " started.");
+    render(); playSound(soundForStage(stages[state.stageIndex])); announce(stages[state.stageIndex].writing ? "Writing sprint starting." : "Writing sprint ended. " + stages[state.stageIndex].name + " started.");
   }
   function tick(now) {
     if (!state.running) return;
@@ -77,7 +141,8 @@
   }
   function start() {
     if (state.running || !stages.length) return;
-    state.running = true; state.lastTick = null; announce("Timer started. " + stages[state.stageIndex].name + "."); requestAnimationFrame(tick);
+    getAudioContext();
+    state.running = true; state.lastTick = null; playSound(soundForStage(stages[state.stageIndex])); announce("Timer started. " + stages[state.stageIndex].name + "."); requestAnimationFrame(tick);
   }
   function pause() { state.running = false; state.lastTick = null; render(); announce("Timer paused."); }
   function restart() { state.remaining = stages[state.stageIndex].minutes * 60; state.lastTick = null; state.lastTimeLabel = null; render(); announce(stages[state.stageIndex].name + " restarted."); }
@@ -102,8 +167,11 @@
       catch { button.textContent = "Copy failed"; announce("Copy failed."); setTimeout(() => { button.textContent = "Copy"; }, 1500); }
     }));
   }
-  $("preset").value = presetKey; loadPreset(); $("preset").value = presetKey; buildStages(); reset();
+  $("preset").value = presetKey; loadPreset(); $("preset").value = presetKey; buildStages(); loadSoundSettings(); reset();
   $("preset").addEventListener("change", event => selectPreset(event.target.value));
+  if ($("sound-enabled")) $("sound-enabled").addEventListener("change", event => { soundEnabled = event.target.checked; saveSoundSettings(); if (soundEnabled) { getAudioContext(); playSound("work"); } });
+  if ($("sound-volume")) $("sound-volume").addEventListener("input", event => { soundVolume = Number(event.target.value); saveSoundSettings(); });
+  if ($("sound-test")) $("sound-test").addEventListener("click", () => { getAudioContext(); playSound("break"); announce("Sound test played."); });
   $("start").addEventListener("click", start); $("pause").addEventListener("click", pause); $("restart").addEventListener("click", restart); $("skip").addEventListener("click", advance); $("reset").addEventListener("click", reset);
   if (viewerMode) $("preset").closest(".preset-picker").style.display = "none";
   else {
