@@ -112,7 +112,8 @@ button { cursor: pointer; }
 button:hover { background: var(--theme-panel-hover); }
 
 button:focus-visible,
-select:focus-visible {
+select:focus-visible,
+input:focus-visible {
   outline: 2px solid var(--theme-accent-strong);
   outline-offset: 3px;
 }
@@ -129,6 +130,34 @@ select:focus-visible {
 .preset-picker select {
   min-width: 210px;
   cursor: pointer;
+}
+
+.sound-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem 1rem;
+  margin-top: 1rem;
+  color: var(--theme-muted);
+  font-size: .85rem;
+}
+
+.sound-toggle, .sound-volume {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+
+.sound-volume input[type="range"] {
+  width: 110px;
+  accent-color: var(--theme-accent);
+}
+
+.sound-controls button {
+  min-height: 38px;
+  padding: .5rem .8rem;
+  font-size: .8rem;
 }
 
 .usage-help {
@@ -202,7 +231,8 @@ body.viewer .timer-shell {
 }
 
 body.viewer .controls, body.viewer .usage-help,
-body.viewer .theme-button {
+body.viewer .theme-button,
+body.viewer .sound-controls {
   display: none;
 }
 
@@ -219,4 +249,5 @@ body.viewer .time { font-size: clamp(5rem, 18vw, 11rem); }
   .controls { align-items: stretch; }
   .preset-picker { width: 100%; }
   .preset-picker select { width: 100%; }
+  .sound-controls { justify-content: flex-start; }
 }
